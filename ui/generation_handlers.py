@@ -23,11 +23,11 @@ from consistency_checker import check_consistency
 def generate_novel_architecture_ui(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先选择保存文件路径")
+        messagebox.showwarning(_("警告"), _("请先选择保存文件路径"))
         return
 
     def task():
-        confirm = messagebox.askyesno("确认", "确定要生成小说架构吗？")
+        confirm = messagebox.askyesno(_("确认"), _("确定要生成小说架构吗？"))
         if not confirm:
             self.enable_button_safe(self.btn_generate_architecture)
             return
@@ -53,7 +53,7 @@ def generate_novel_architecture_ui(self):
             # 获取内容指导
             user_guidance = self.user_guide_text.get("0.0", "end").strip()
 
-            self.safe_log("开始生成小说架构...")
+            self.safe_log(_("开始生成小说架构..."))
             Novel_architecture_generate(
                 interface_format=interface_format,
                 api_key=api_key,
@@ -69,9 +69,9 @@ def generate_novel_architecture_ui(self):
                 timeout=timeout_val,
                 user_guidance=user_guidance  # 添加内容指导参数
             )
-            self.safe_log("✅ 小说架构生成完成。请在 'Novel Architecture' 标签页查看或编辑。")
+            self.safe_log(_("✅ 小说架构生成完成。请在 'Novel Architecture' 标签页查看或编辑。"))
         except Exception:
-            self.handle_exception("生成小说架构时出错")
+            self.handle_exception(_("生成小说架构时出错"))
         finally:
             self.enable_button_safe(self.btn_generate_architecture)
     threading.Thread(target=task, daemon=True).start()
@@ -79,11 +79,11 @@ def generate_novel_architecture_ui(self):
 def generate_chapter_blueprint_ui(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先选择保存文件路径")
+        messagebox.showwarning(_("警告"), _("请先选择保存文件路径"))
         return
 
     def task():
-        if not messagebox.askyesno("确认", "确定要生成章节目录吗？"):
+        if not messagebox.askyesno(_("确认"), _("确定要生成章节目录吗？")):
             self.enable_button_safe(self.btn_generate_chapter)
             return
         self.disable_button_safe(self.btn_generate_directory)
@@ -102,7 +102,7 @@ def generate_chapter_blueprint_ui(self):
 
             user_guidance = self.user_guide_text.get("0.0", "end").strip()  # 新增获取用户指导
 
-            self.safe_log("开始生成章节蓝图...")
+            self.safe_log(_("开始生成章节蓝图..."))
             Chapter_blueprint_generate(
                 interface_format=interface_format,
                 api_key=api_key,
@@ -115,9 +115,9 @@ def generate_chapter_blueprint_ui(self):
                 timeout=timeout_val,
                 user_guidance=user_guidance  # 新增参数
             )
-            self.safe_log("✅ 章节蓝图生成完成。请在 'Chapter Blueprint' 标签页查看或编辑。")
+            self.safe_log(_("✅ 章节蓝图生成完成。请在 'Chapter Blueprint' 标签页查看或编辑。"))
         except Exception:
-            self.handle_exception("生成章节蓝图时出错")
+            self.handle_exception(_("生成章节蓝图时出错"))
         finally:
             self.enable_button_safe(self.btn_generate_directory)
     threading.Thread(target=task, daemon=True).start()
@@ -125,7 +125,7 @@ def generate_chapter_blueprint_ui(self):
 def generate_chapter_draft_ui(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先配置保存文件路径。")
+        messagebox.showwarning(_("警告"), _("请先配置保存文件路径。"))
         return
 
     def task():
@@ -156,7 +156,7 @@ def generate_chapter_draft_ui(self):
             embedding_model_name = self.embedding_model_name_var.get().strip()
             embedding_k = self.safe_get_int(self.embedding_retrieval_k_var, 4)
 
-            self.safe_log(f"生成第{chap_num}章草稿：准备生成请求提示词...")
+            self.safe_log(_(f"生成第{chap_num}章草稿：准备生成请求提示词..."))
 
             # 调用新添加的 build_chapter_prompt 函数构造初始提示词
             prompt_text = build_chapter_prompt(
@@ -188,19 +188,19 @@ def generate_chapter_draft_ui(self):
 
             def create_dialog():
                 dialog = ctk.CTkToplevel(self.master)
-                dialog.title("当前章节请求提示词（可编辑）")
+                dialog.title(_("当前章节请求提示词（可编辑）"))
                 dialog.geometry("600x400")
                 text_box = ctk.CTkTextbox(dialog, wrap="word", font=("Microsoft YaHei", 12))
                 text_box.pack(fill="both", expand=True, padx=10, pady=10)
 
                 # 字数统计标签
-                wordcount_label = ctk.CTkLabel(dialog, text="字数：0", font=("Microsoft YaHei", 12))
+                wordcount_label = ctk.CTkLabel(dialog, text=_("字数：0"), font=("Microsoft YaHei", 12))
                 wordcount_label.pack(side="left", padx=(10,0), pady=5)
                 
                 # 插入角色内容
                 final_prompt = prompt_text
                 role_names = [name.strip() for name in self.char_inv_text.get("0.0", "end").strip().split(',') if name.strip()]
-                role_lib_path = os.path.join(filepath, "角色库")
+                role_lib_path = os.path.join(filepath, _("角色库"))
                 role_contents = []
                 
                 if os.path.exists(role_lib_path):
@@ -212,30 +212,30 @@ def generate_chapter_draft_ui(self):
                                     with open(file_path, 'r', encoding='utf-8') as f:
                                         role_contents.append(f.read().strip())  # 直接使用文件内容，不添加重复名字
                                 except Exception as e:
-                                    self.safe_log(f"读取角色文件 {file} 失败: {str(e)}")
+                                    self.safe_log(_(f"读取角色文件 {file} 失败: {str(e)}"))
                 
                 if role_contents:
                     role_content_str = "\n".join(role_contents)
                     # 更精确的替换逻辑，处理不同情况下的占位符
                     placeholder_variations = [
-                        "核心人物(可能未指定)：{characters_involved}",
-                        "核心人物：{characters_involved}",
-                        "核心人物(可能未指定):{characters_involved}",
-                        "核心人物:{characters_involved}"
+                        _("核心人物(可能未指定)：{characters_involved}"),
+                        _("核心人物：{characters_involved}"),
+                        _("核心人物(可能未指定):{characters_involved}"),
+                        _("核心人物:{characters_involved}")
                     ]
                     
                     for placeholder in placeholder_variations:
                         if placeholder in final_prompt:
                             final_prompt = final_prompt.replace(
                                 placeholder,
-                                f"核心人物：\n{role_content_str}"
+                                _("核心人物：\n{role_content_str}")
                             )
                             break
                     else:  # 如果没有找到任何已知占位符变体
                         lines = final_prompt.split('\n')
                         for i, line in enumerate(lines):
-                            if "核心人物" in line and "：" in line:
-                                lines[i] = f"核心人物：\n{role_content_str}"
+                            if _("核心人物") in line and "：" in line:
+                                lines[i] = _("核心人物：\n{role_content_str}")
                                 break
                         final_prompt = '\n'.join(lines)
 
@@ -244,7 +244,7 @@ def generate_chapter_draft_ui(self):
                 def update_word_count(event=None):
                     text = text_box.get("0.0", "end-1c")
                     text_length = len(text)
-                    wordcount_label.configure(text=f"字数：{text_length}")
+                    wordcount_label.configure(text=_("字数：{text_length}"))
 
                 text_box.bind("<KeyRelease>", update_word_count)
                 text_box.bind("<ButtonRelease>", update_word_count)
@@ -260,9 +260,9 @@ def generate_chapter_draft_ui(self):
                     result["prompt"] = None
                     dialog.destroy()
                     event.set()
-                btn_confirm = ctk.CTkButton(button_frame, text="确认使用", font=("Microsoft YaHei", 12), command=on_confirm)
+                btn_confirm = ctk.CTkButton(button_frame, text=_("确认使用"), font=("Microsoft YaHei", 12), command=on_confirm)
                 btn_confirm.pack(side="left", padx=10)
-                btn_cancel = ctk.CTkButton(button_frame, text="取消请求", font=("Microsoft YaHei", 12), command=on_cancel)
+                btn_cancel = ctk.CTkButton(button_frame, text=_("取消请求"), font=("Microsoft YaHei", 12), command=on_cancel)
                 btn_cancel.pack(side="left", padx=10)
                 # 若用户直接关闭弹窗，则调用 on_cancel 处理
                 dialog.protocol("WM_DELETE_WINDOW", on_cancel)
@@ -271,10 +271,10 @@ def generate_chapter_draft_ui(self):
             event.wait()  # 等待用户操作完成
             edited_prompt = result["prompt"]
             if edited_prompt is None:
-                self.safe_log("❌ 用户取消了草稿生成请求。")
+                self.safe_log(_("❌ 用户取消了草稿生成请求。"))
                 return
 
-            self.safe_log("开始生成章节草稿...")
+            self.safe_log(_("开始生成章节草稿..."))
             from novel_generator.chapter import generate_chapter_draft
             draft_text = generate_chapter_draft(
                 api_key=api_key,
@@ -300,12 +300,12 @@ def generate_chapter_draft_ui(self):
                 custom_prompt_text=edited_prompt  # 使用用户编辑后的提示词
             )
             if draft_text:
-                self.safe_log(f"✅ 第{chap_num}章草稿生成完成。请在左侧查看或编辑。")
+                self.safe_log(_(f"✅ 第{chap_num}章草稿生成完成。请在左侧查看或编辑。"))
                 self.master.after(0, lambda: self.show_chapter_in_textbox(draft_text))
             else:
-                self.safe_log("⚠️ 本章草稿生成失败或无内容。")
+                self.safe_log(_("⚠️ 本章草稿生成失败或无内容。"))
         except Exception:
-            self.handle_exception("生成章节草稿时出错")
+            self.handle_exception(_("生成章节草稿时出错"))
         finally:
             self.enable_button_safe(self.btn_generate_chapter)
     threading.Thread(target=task, daemon=True).start()
@@ -313,11 +313,11 @@ def generate_chapter_draft_ui(self):
 def finalize_chapter_ui(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先配置保存文件路径。")
+        messagebox.showwarning(_("警告"), _("请先配置保存文件路径。"))
         return
 
     def task():
-        if not messagebox.askyesno("确认", "确定要定稿当前章节吗？"):
+        if not messagebox.askyesno(_("确认"), _("确定要定稿当前章节吗？")):
             self.enable_button_safe(self.btn_finalize_chapter)
             return
 
@@ -341,7 +341,7 @@ def finalize_chapter_ui(self):
             chap_num = self.safe_get_int(self.chapter_num_var, 1)
             word_number = self.safe_get_int(self.word_number_var, 3000)
 
-            self.safe_log(f"开始定稿第{chap_num}章...")
+            self.safe_log(_(f"开始定稿第{chap_num}章..."))
 
             chapters_dir = os.path.join(filepath, "chapters")
             os.makedirs(chapters_dir, exist_ok=True)
@@ -350,9 +350,9 @@ def finalize_chapter_ui(self):
             edited_text = self.chapter_result.get("0.0", "end").strip()
 
             if len(edited_text) < 0.7 * word_number:
-                ask = messagebox.askyesno("字数不足", f"当前章节字数 ({len(edited_text)}) 低于目标字数({word_number})的70%，是否要尝试扩写？")
+                ask = messagebox.askyesno(_("字数不足"), _(f"当前章节字数 ({len(edited_text)}) 低于目标字数({word_number})的70%，是否要尝试扩写？"))
                 if ask:
-                    self.safe_log("正在扩写章节内容...")
+                    self.safe_log(_("正在扩写章节内容..."))
                     enriched = enrich_chapter_text(
                         chapter_text=edited_text,
                         word_number=word_number,
@@ -386,12 +386,12 @@ def finalize_chapter_ui(self):
                 max_tokens=max_tokens,
                 timeout=timeout_val
             )
-            self.safe_log(f"✅ 第{chap_num}章定稿完成（已更新前文摘要、角色状态、向量库）。")
+            self.safe_log(_(f"✅ 第{chap_num}章定稿完成（已更新前文摘要、角色状态、向量库）。"))
 
             final_text = read_file(chapter_file)
             self.master.after(0, lambda: self.show_chapter_in_textbox(final_text))
         except Exception:
-            self.handle_exception("定稿章节时出错")
+            self.handle_exception(_("定稿章节时出错"))
         finally:
             self.enable_button_safe(self.btn_finalize_chapter)
     threading.Thread(target=task, daemon=True).start()
@@ -399,7 +399,7 @@ def finalize_chapter_ui(self):
 def do_consistency_check(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先配置保存文件路径。")
+        messagebox.showwarning(_("警告"), _("请先配置保存文件路径。"))
         return
 
     def task():
@@ -419,10 +419,10 @@ def do_consistency_check(self):
             chapter_text = read_file(chap_file)
 
             if not chapter_text.strip():
-                self.safe_log("⚠️ 当前章节文件为空或不存在，无法审校。")
+                self.safe_log(_("⚠️ 当前章节文件为空或不存在，无法审校。"))
                 return
 
-            self.safe_log("开始一致性审校...")
+            self.safe_log(_("开始一致性审校..."))
             result = check_consistency(
                 novel_setting="",
                 character_state=read_file(os.path.join(filepath, "character_state.txt")),
@@ -437,10 +437,10 @@ def do_consistency_check(self):
                 timeout=timeout,
                 plot_arcs=""
             )
-            self.safe_log("审校结果：")
+            self.safe_log(_("审校结果："))
             self.safe_log(result)
         except Exception:
-            self.handle_exception("审校时出错")
+            self.handle_exception(_("审校时出错"))
         finally:
             self.enable_button_safe(self.btn_check_consistency)
     threading.Thread(target=task, daemon=True).start()
@@ -454,24 +454,24 @@ def generate_batch_ui(self):
         else:
             num = max(int(os.path.basename(f).split('_')[1].split('.')[0]) for f in files) + 1
         dialog.geometry("+500+400")
-        tk.Label(dialog, text="起始章节").grid(row=0, column=0)
+        tk.Label(dialog, text=_("起始章节")).grid(row=0, column=0)
         entry_start = tk.Entry(dialog)
         entry_start.grid(row=0, column=1)
         entry_start.insert(0, str(num))
-        tk.Label(dialog, text="结束章节").grid(row=0, column=2)
+        tk.Label(dialog, text=_("结束章节")).grid(row=0, column=2)
         entry_end = tk.Entry(dialog)
         entry_end.grid(row=0, column=3)
-        tk.Label(dialog, text="期望字数").grid(row=1, column=0)
+        tk.Label(dialog, text=_("期望字数")).grid(row=1, column=0)
         entry_word = tk.Entry(dialog)
         entry_word.grid(row=1, column=1)
         entry_word.insert(0, self.word_number_var.get())
-        tk.Label(dialog, text="最低字数").grid(row=1, column=2)
+        tk.Label(dialog, text=_("最低字数")).grid(row=1, column=2)
         entry_min = tk.Entry(dialog)
         entry_min.grid(row=1, column=3)
         entry_min.insert(0, self.word_number_var.get())
 
         auto_enrich_bool = tk.BooleanVar()
-        auto_enrich_bool_ck = tk.Checkbutton(dialog, text="低于最低字数时自动扩写", variable=auto_enrich_bool)
+        auto_enrich_bool_ck = tk.Checkbutton(dialog, text=_("低于最低字数时自动扩写"), variable=auto_enrich_bool)
         auto_enrich_bool_ck.grid(row=2, column=0)
 
         result = {"start": None, "end": None, "word": None, "min": None, "auto_enrich": None, "close": False}
@@ -480,7 +480,7 @@ def generate_batch_ui(self):
         def on_confirm():
             nonlocal result
             if not entry_start.get() or not entry_end.get() or not entry_word.get() or not entry_min.get():
-                messagebox.showwarning("警告", "请填写完整信息。")
+                messagebox.showwarning(_("警告"), _("请填写完整信息。"))
                 return
 
             result = {
@@ -497,7 +497,7 @@ def generate_batch_ui(self):
             nonlocal result
             result["close"] = True
             dialog.destroy()
-        tk.Button(dialog, text="确认", command=on_confirm).grid(row=2, column=1)
+        tk.Button(dialog, text=_("确认"), command=on_confirm).grid(row=2, column=1)
         dialog.protocol("WM_DELETE_WINDOW", on_cancel)
         dialog.transient(self.master)
         dialog.grab_set()
@@ -549,7 +549,7 @@ def generate_batch_ui(self):
         )
         final_prompt = prompt_text
         role_names = [name.strip() for name in self.char_inv_text.get("0.0", "end").split("\n")]
-        role_lib_path = os.path.join(self.filepath_var.get().strip(), "角色库")
+        role_lib_path = os.path.join(self.filepath_var.get().strip(), _("角色库"))
         role_contents = []
         if os.path.exists(role_lib_path):
             for root, dirs, files in os.walk(role_lib_path):
@@ -560,29 +560,29 @@ def generate_batch_ui(self):
                             with open(file_path, 'r', encoding='utf-8') as f:
                                 role_contents.append(f.read().strip())  # 直接使用文件内容，不添加重复名字
                         except Exception as e:
-                            self.safe_log(f"读取角色文件 {file} 失败: {str(e)}")
+                            self.safe_log(_(f"读取角色文件 {file} 失败: {str(e)}"))
         if role_contents:
             role_content_str = "\n".join(role_contents)
             # 更精确的替换逻辑，处理不同情况下的占位符
             placeholder_variations = [
-                "核心人物(可能未指定)：{characters_involved}",
-                "核心人物：{characters_involved}",
-                "核心人物(可能未指定):{characters_involved}",
-                "核心人物:{characters_involved}"
+                _("核心人物(可能未指定)：{characters_involved}"),
+                _("核心人物：{characters_involved}"),
+                _("核心人物(可能未指定):{characters_involved}"),
+                _("核心人物:{characters_involved}")
             ]
             
             for placeholder in placeholder_variations:
                 if placeholder in final_prompt:
                     final_prompt = final_prompt.replace(
                         placeholder,
-                        f"核心人物：\n{role_content_str}"
+                        _("核心人物：\n{role_content_str}")
                     )
                     break
             else:  # 如果没有找到任何已知占位符变体
                 lines = final_prompt.split('\n')
                 for i, line in enumerate(lines):
-                    if "核心人物" in line and "：" in line:
-                        lines[i] = f"核心人物：\n{role_content_str}"
+                    if _("核心人物") in line and "：" in line:
+                        lines[i] = _("核心人物：\n{role_content_str}")
                         break
                 final_prompt = '\n'.join(lines)
         draft_text = generate_chapter_draft(
@@ -621,7 +621,7 @@ def generate_batch_ui(self):
         os.makedirs(chapters_dir, exist_ok=True)
         chapter_path = os.path.join(chapters_dir, f"chapter_{i}.txt")
         if len(draft_text) < 0.7 * min and auto_enrich:
-            self.safe_log(f"第{i}章草稿字数 ({len(draft_text)}) 低于目标字数({min})的70%，正在扩写...")
+            self.safe_log(_(f"第{i}章草稿字数 ({len(draft_text)}) 低于目标字数({min})的70%，正在扩写..."))
             enriched = enrich_chapter_text(
                 chapter_text=draft_text,
                 word_number=word,
@@ -664,8 +664,8 @@ def generate_batch_ui(self):
 
 def import_knowledge_handler(self):
     selected_file = tk.filedialog.askopenfilename(
-        title="选择要导入的知识库文件",
-        filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+        title=_("选择要导入的知识库文件"),
+        filetypes=[(_("Text Files"), "*.txt"), (_("All Files"), "*.*")]
     )
     if selected_file:
         def task():
@@ -687,11 +687,11 @@ def import_knowledge_handler(self):
                     except UnicodeDecodeError:
                         continue
                     except Exception as e:
-                        self.safe_log(f"读取文件时发生错误: {str(e)}")
+                        self.safe_log(_(f"读取文件时发生错误: {str(e)}"))
                         raise
 
                 if content is None:
-                    raise Exception("无法以任何已知编码格式读取文件")
+                    raise Exception(_("无法以任何已知编码格式读取文件"))
 
                 # 创建临时UTF-8文件
                 import tempfile
@@ -701,7 +701,7 @@ def import_knowledge_handler(self):
                     temp_path = temp.name
 
                 try:
-                    self.safe_log(f"开始导入知识库文件: {selected_file}")
+                    self.safe_log(_(f"开始导入知识库文件: {selected_file}"))
                     import_knowledge_file(
                         embedding_api_key=emb_api_key,
                         embedding_url=emb_url,
@@ -710,7 +710,7 @@ def import_knowledge_handler(self):
                         file_path=temp_path,
                         filepath=self.filepath_var.get().strip()
                     )
-                    self.safe_log("✅ 知识库文件导入完成。")
+                    self.safe_log(_("✅ 知识库文件导入完成。"))
                 finally:
                     # 清理临时文件
                     try:
@@ -719,7 +719,7 @@ def import_knowledge_handler(self):
                         pass
 
             except Exception:
-                self.handle_exception("导入知识库时出错")
+                self.handle_exception(_("导入知识库时出错"))
             finally:
                 self.enable_button_safe(self.btn_import_knowledge)
 
@@ -728,40 +728,40 @@ def import_knowledge_handler(self):
             thread.start()
         except Exception as e:
             self.enable_button_safe(self.btn_import_knowledge)
-            messagebox.showerror("错误", f"线程启动失败: {str(e)}")
+            messagebox.showerror(_("错误"), _(f"线程启动失败: {str(e)}"))
 
 def clear_vectorstore_handler(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先配置保存文件路径。")
+        messagebox.showwarning(_("警告"), _("请先配置保存文件路径。"))
         return
 
-    first_confirm = messagebox.askyesno("警告", "确定要清空本地向量库吗？此操作不可恢复！")
+    first_confirm = messagebox.askyesno(_("警告"), _("确定要清空本地向量库吗？此操作不可恢复！"))
     if first_confirm:
-        second_confirm = messagebox.askyesno("二次确认", "你确定真的要删除所有向量数据吗？此操作不可恢复！")
+        second_confirm = messagebox.askyesno(_("二次确认"), _("你确定真的要删除所有向量数据吗？此操作不可恢复！"))
         if second_confirm:
             if clear_vector_store(filepath):
-                self.log("已清空向量库。")
+                self.log(_("已清空向量库。"))
             else:
-                self.log(f"未能清空向量库，请关闭程序后手动删除 {filepath} 下的 vectorstore 文件夹。")
+                self.log(_(f"未能清空向量库，请关闭程序后手动删除 {filepath} 下的 vectorstore 文件夹。"))
 
 def show_plot_arcs_ui(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:
-        messagebox.showwarning("警告", "请先在主Tab中设置保存文件路径")
+        messagebox.showwarning(_("警告"), _("请先在主Tab中设置保存文件路径"))
         return
 
     plot_arcs_file = os.path.join(filepath, "plot_arcs.txt")
     if not os.path.exists(plot_arcs_file):
-        messagebox.showinfo("剧情要点", "当前还未生成任何剧情要点或冲突记录。")
+        messagebox.showinfo(_("剧情要点"), _("当前还未生成任何剧情要点或冲突记录。"))
         return
 
     arcs_text = read_file(plot_arcs_file).strip()
     if not arcs_text:
-        arcs_text = "当前没有记录的剧情要点或冲突。"
+        arcs_text = _("当前没有记录的剧情要点或冲突。")
 
     top = ctk.CTkToplevel(self.master)
-    top.title("剧情要点/未解决冲突")
+    top.title(_("剧情要点/未解决冲突"))
     top.geometry("600x400")
     text_area = ctk.CTkTextbox(top, wrap="word", font=("Microsoft YaHei", 12))
     text_area.pack(fill="both", expand=True, padx=10, pady=10)

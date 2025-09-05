@@ -26,14 +26,14 @@ def parse_chapter_blueprint(blueprint_text: str):
     #   第1章 - 紫极光下的预兆
     # 或
     #   第1章 - [紫极光下的预兆]
-    chapter_number_pattern = re.compile(r'^第\s*(\d+)\s*章\s*-\s*\[?(.*?)\]?$')
+    chapter_number_pattern = re.compile(_(r'^第\s*(\d+)\s*章\s*-\s*\[?(.*?)\]?$'))
 
-    role_pattern     = re.compile(r'^本章定位：\s*\[?(.*)\]?$')
-    purpose_pattern  = re.compile(r'^核心作用：\s*\[?(.*)\]?$')
-    suspense_pattern = re.compile(r'^悬念密度：\s*\[?(.*)\]?$')
-    foreshadow_pattern = re.compile(r'^伏笔操作：\s*\[?(.*)\]?$')
-    twist_pattern       = re.compile(r'^认知颠覆：\s*\[?(.*)\]?$')
-    summary_pattern = re.compile(r'^本章简述：\s*\[?(.*)\]?$')
+    role_pattern     = re.compile(_(r'^本章定位：\s*\[?(.*)\]?$'))
+    purpose_pattern  = re.compile(_(r'^核心作用：\s*\[?(.*)\]?$'))
+    suspense_pattern = re.compile(_(r'^悬念密度：\s*\[?(.*)\]?$'))
+    foreshadow_pattern = re.compile(_(r'^伏笔操作：\s*\[?(.*)\]?$'))
+    twist_pattern       = re.compile(_(r'^认知颠覆：\s*\[?(.*)\]?$'))
+    summary_pattern = re.compile(_(r'^本章简述：\s*\[?(.*)\]?$'))
 
     for chunk in chunks:
         lines = chunk.strip().splitlines()
@@ -122,7 +122,7 @@ def get_chapter_info_from_blueprint(blueprint_text: str, target_chapter_number: 
     # 默认返回
     return {
         "chapter_number": target_chapter_number,
-        "chapter_title": f"第{target_chapter_number}章",
+        "chapter_title": _(f"第{target_chapter_number}章"),
         "chapter_role": "",
         "chapter_purpose": "",
         "suspense_level": "",

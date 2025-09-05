@@ -43,7 +43,7 @@ class NovelGeneratorGUI:
     """
     def __init__(self, master):
         self.master = master
-        self.master.title("Novel Generator GUI")
+        self.master.title(_("Novel Generator GUI"))
         try:
             if os.path.exists("icon.ico"):
                 self.master.iconbitmap("icon.ico")
@@ -170,8 +170,8 @@ class NovelGeneratorGUI:
 
     # ----------------- 通用辅助函数 -----------------
     def show_tooltip(self, key: str):
-        info_text = tooltips.get(key, "暂无说明")
-        messagebox.showinfo("参数说明", info_text)
+        info_text = tooltips.get(key, _("暂无说明"))
+        messagebox.showinfo(_("参数说明"), info_text)
 
     def safe_get_int(self, var, default=1):
         try:
@@ -256,7 +256,7 @@ class NovelGeneratorGUI:
     def show_character_import_window(self):
         """显示角色导入窗口"""
         import_window = ctk.CTkToplevel(self.master)
-        import_window.title("导入角色信息")
+        import_window.title(_("导入角色信息"))
         import_window.geometry("600x500")
         import_window.transient(self.master)  # 设置为父窗口的临时窗口
         import_window.grab_set()  # 保持窗口在顶层
@@ -270,7 +270,7 @@ class NovelGeneratorGUI:
         scroll_frame.pack(fill="both", expand=True, padx=5, pady=5)
         
         # 获取角色库路径
-        role_lib_path = os.path.join(self.filepath_var.get().strip(), "角色库")
+        role_lib_path = os.path.join(self.filepath_var.get().strip(), _("角色库"))
         self.selected_roles = []  # 存储选中的角色名称
         
         # 动态加载角色分类
@@ -336,17 +336,17 @@ class NovelGeneratorGUI:
             self.char_inv_text.insert("0.0", ", ".join(selected))
             import_window.destroy()
             
-        btn_confirm = ctk.CTkButton(btn_frame, text="选择", command=confirm_selection)
+        btn_confirm = ctk.CTkButton(btn_frame, text=_("选择"), command=confirm_selection)
         btn_confirm.pack(side="left", padx=20)
         
         # 取消按钮
-        btn_cancel = ctk.CTkButton(btn_frame, text="取消", command=import_window.destroy)
+        btn_cancel = ctk.CTkButton(btn_frame, text=_("取消"), command=import_window.destroy)
         btn_cancel.pack(side="right", padx=20)
 
     def show_role_library(self):
         save_path = self.filepath_var.get().strip()
         if not save_path:
-            messagebox.showwarning("警告", "请先设置保存路径")
+            messagebox.showwarning(_("警告"), _("请先设置保存路径"))
             return
         
         # 初始化LLM适配器

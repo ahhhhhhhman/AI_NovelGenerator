@@ -19,16 +19,16 @@ def create_label_with_help(self, parent, label_text, tooltip_key, row, column,
     frame.grid(row=row, column=column, padx=padx, pady=pady, sticky=sticky)
     frame.columnconfigure(0, weight=0)
 
-    label = ctk.CTkLabel(frame, text=label_text, font=font)
+    label = ctk.CTkLabel(frame, text=_(label_text), font=font)
     label.pack(side="left")
 
     btn = ctk.CTkButton(
         frame,
-        text="?",
+        text=_("?"),
         width=22,
         height=22,
         font=("Microsoft YaHei", 10),
-        command=lambda: messagebox.showinfo("参数说明", tooltips.get(tooltip_key, "暂无说明"))
+        command=lambda: messagebox.showinfo(_("参数说明"), tooltips.get(tooltip_key, _("暂无说明")))
     )
     btn.pack(side="left", padx=3)
 
@@ -41,9 +41,9 @@ def build_config_tabview(self):
     self.config_tabview = ctk.CTkTabview(self.config_frame)
     self.config_tabview.grid(row=0, column=0, sticky="we", padx=5, pady=5)
 
-    self.ai_config_tab = self.config_tabview.add("LLM Model settings")
-    self.embeddings_config_tab = self.config_tabview.add("Embedding settings")
-    self.config_choose = self.config_tabview.add("Config choose")
+    self.ai_config_tab = self.config_tabview.add(_("LLM Model settings"))
+    self.embeddings_config_tab = self.config_tabview.add(_("Embedding settings"))
+    self.config_choose = self.config_tabview.add(_("Config choose"))
 
 
     build_ai_config_tab(self)
@@ -79,8 +79,8 @@ def build_ai_config_tab(self):
     def add_new_config():
         """添加新配置 - 弹出对话框让用户输入名称"""
         dialog = ctk.CTkInputDialog(
-            text="请输入新配置名称:",
-            title="新增配置"
+            text=_("请输入新配置名称:"),
+            title=_("新增配置")
         )
         new_name = dialog.get_input()
         
@@ -90,7 +90,7 @@ def build_ai_config_tab(self):
         new_name = new_name.strip()
         
         if new_name in self.loaded_config.get("llm_configs", {}):
-            messagebox.showerror("错误", f"配置名称 '{new_name}' 已存在!")
+            messagebox.showerror(_("错误"), _(f"配置名称 '{new_name}' 已存在!"))
             return
             
         if "llm_configs" not in self.loaded_config:
@@ -110,19 +110,19 @@ def build_ai_config_tab(self):
         
         refresh_config_dropdown()
         self.interface_config_var.set(new_name)
-        messagebox.showinfo("提示", f"已成功创建新配置: {new_name}")
+        messagebox.showinfo(_("提示"), _(f"已成功创建新配置: {new_name}"))
 
     def delete_current_config():
         """删除当前选中的配置并保存到JSON文件"""
         selected_config = self.interface_config_var.get()
         if selected_config in self.loaded_config.get("llm_configs", {}):
             if len(self.loaded_config["llm_configs"]) <= 1:
-                messagebox.showerror("错误", "至少需要保留一个配置!")
+                messagebox.showerror(_("错误"), _("至少需要保留一个配置!"))
                 return
                 
             confirm = messagebox.askyesno(
-            "确认删除",
-            f"确定要删除配置 '{selected_config}' 吗?\n此操作不可撤销!"
+            _("确认删除"),
+            _(f"确定要删除配置 '{selected_config}' 吗?\n此操作不可撤销!")
         )
         if not confirm:
             return
@@ -133,17 +133,17 @@ def build_ai_config_tab(self):
         # 保存到JSON文件
         try:
             save_config(self.loaded_config, self.config_file)
-            messagebox.showinfo("提示", f"已删除配置: {selected_config}，并已更新配置文件")
+            messagebox.showinfo(_("提示"), _(f"已删除配置: {selected_config}，并已更新配置文件"))
         except Exception as e:
-            messagebox.showerror("错误", f"保存配置文件失败: {str(e)}")
+            messagebox.showerror(_("错误"), _(f"保存配置文件失败: {str(e)}"))
         else:
-            messagebox.showerror("错误", "未找到选中的配置!")
+            messagebox.showerror(_("错误"), _("未找到选中的配置!"))
 
     def save_current_config():
         """保存当前配置的修改到JSON文件"""
         config_name = self.interface_config_var.get()
         if config_name not in self.loaded_config.get("llm_configs", {}):
-            messagebox.showerror("错误", "配置不存在!")
+            messagebox.showerror(_("错误"), _("配置不存在!"))
             return
             
         config = self.loaded_config["llm_configs"][config_name]
@@ -191,20 +191,20 @@ def build_ai_config_tab(self):
         # 保存到JSON文件
         try:
             save_config(self.loaded_config, self.config_file)
-            messagebox.showinfo("提示", f"配置 {new_name} 已保存并持久化到文件")
+            messagebox.showinfo(_("提示"), _(f"配置 {new_name} 已保存并持久化到文件"))
         except Exception as e:
-            messagebox.showerror("错误", f"保存配置文件失败: {str(e)}")
+            messagebox.showerror(_("错误"), _(f"保存配置文件失败: {str(e)}"))
 
     def rename_current_config():
         """重命名当前配置"""
         old_name = self.interface_config_var.get()
         if old_name not in self.loaded_config.get("llm_configs", {}):
-            messagebox.showerror("错误", "当前配置不存在!")
+            messagebox.showerror(_("错误"), _("当前配置不存在!"))
             return
             
         dialog = ctk.CTkInputDialog(
-            text=f"请输入新的配置名称 (原名称: {old_name}):",
-            title="重命名配置"
+            text=_(f"请输入新的配置名称 (原名称: {old_name}):"),
+            title=_("重命名配置")
         )
         new_name = dialog.get_input()
         
@@ -217,7 +217,7 @@ def build_ai_config_tab(self):
             return
             
         if new_name in self.loaded_config.get("llm_configs", {}):
-            messagebox.showerror("错误", f"配置名称 '{new_name}' 已存在!")
+            messagebox.showerror(_("错误"), _(f"配置名称 '{new_name}' 已存在!"))
             return
             
         # 更新配置名称
@@ -225,7 +225,7 @@ def build_ai_config_tab(self):
         self.interface_config_var.set(new_name)
         refresh_config_dropdown()
 
-        messagebox.showinfo("提示", f"配置已从 '{old_name}' 重命名为 '{new_name}'")
+        messagebox.showinfo(_("提示"), _(f"配置已从 '{old_name}' 重命名为 '{new_name}'"))
 
     # 初始化UI布局
     for i in range(10):
@@ -235,11 +235,11 @@ def build_ai_config_tab(self):
     self.ai_config_tab.grid_columnconfigure(2, weight=0)
 
     # 配置选择控件
-    create_label_with_help(self, self.ai_config_tab, "当前配置", "interface_config", 0, 0)
+    create_label_with_help(self, self.ai_config_tab, _("当前配置"), "interface_config", 0, 0)
     config_names = list(self.loaded_config.get("llm_configs", {}).keys())
     if not config_names:
         self.loaded_config["llm_configs"] = {
-            "默认配置": {
+            _("默认配置"): {
                 "id": str(uuid.uuid4()),
                 "api_key": "",
                 "base_url": "https://api.openai.com/v1",
@@ -251,7 +251,7 @@ def build_ai_config_tab(self):
                 "created_at": datetime.datetime.now().isoformat()
             }
         }
-        config_names = ["默认配置"]
+        config_names = [_("默认配置")]
     
     self.interface_config_var = ctk.StringVar(value=config_names[0])
 
@@ -274,7 +274,7 @@ def build_ai_config_tab(self):
 
     add_btn = ctk.CTkButton(
         btn_frame, 
-        text="➕ 新增", 
+        text=_("➕ 新增"), 
         command=add_new_config,
         font=("Microsoft YaHei", 12),
         fg_color="#2E8B57",
@@ -284,7 +284,7 @@ def build_ai_config_tab(self):
 
     rename_btn = ctk.CTkButton(
         btn_frame, 
-        text="✏️ 重命名", 
+        text=_("✏️ 重命名"), 
         command=rename_current_config,
         font=("Microsoft YaHei", 12),
         fg_color="#DAA520",
@@ -294,7 +294,7 @@ def build_ai_config_tab(self):
 
     del_btn = ctk.CTkButton(
         btn_frame, 
-        text="🗑️ 删除", 
+        text=_("🗑️ 删除"), 
         command=delete_current_config,
         font=("Microsoft YaHei", 12),
         fg_color="#8B0000",
@@ -304,7 +304,7 @@ def build_ai_config_tab(self):
 
     save_btn = ctk.CTkButton(
         btn_frame, 
-        text="💾 保存", 
+        text=_("💾 保存"), 
         command=save_current_config,
         font=("Microsoft YaHei", 12),
         fg_color="#1E90FF",
@@ -315,7 +315,7 @@ def build_ai_config_tab(self):
     # 配置参数控件
     row_start = 2
     # 1) API Key
-    create_label_with_help(self, self.ai_config_tab, "API Key:", "api_key", row_start, 0)
+    create_label_with_help(self, self.ai_config_tab, _("API Key:"), "api_key", row_start, 0)
     self.api_key_var = ctk.StringVar(value="")
     api_key_entry = ctk.CTkEntry(
         self.ai_config_tab, 
@@ -326,7 +326,7 @@ def build_ai_config_tab(self):
     api_key_entry.grid(row=row_start, column=1, columnspan=2, padx=5, pady=5, sticky="nsew")
     
     # 2) Base URL
-    create_label_with_help(self, self.ai_config_tab, "Base URL:", "base_url", row_start+1, 0)
+    create_label_with_help(self, self.ai_config_tab, _("Base URL:"), "base_url", row_start+1, 0)
     self.base_url_var = ctk.StringVar(value="")
     base_url_entry = ctk.CTkEntry(
         self.ai_config_tab, 
@@ -336,7 +336,7 @@ def build_ai_config_tab(self):
     base_url_entry.grid(row=row_start+1, column=1, columnspan=2, padx=5, pady=5, sticky="nsew")
     
     # 3) 接口格式
-    create_label_with_help(self, self.ai_config_tab, "接口格式:", "interface_format", row_start+2, 0)
+    create_label_with_help(self, self.ai_config_tab, _("接口格式:"), "interface_format", row_start+2, 0)
     self.interface_format_var = ctk.StringVar(value="OpenAI")
     interface_options = ["OpenAI", "Azure OpenAI", "Ollama", "DeepSeek", "Gemini", "ML Studio"]
     interface_dropdown = ctk.CTkOptionMenu(
@@ -348,7 +348,7 @@ def build_ai_config_tab(self):
     interface_dropdown.grid(row=row_start+2, column=1, columnspan=2, padx=5, pady=5, sticky="nsew")
     
     # 4) Model Name
-    create_label_with_help(self, self.ai_config_tab, "模型名称:", "model_name", row_start+3, 0)
+    create_label_with_help(self, self.ai_config_tab, _("模型名称:"), "model_name", row_start+3, 0)
     self.model_name_var = ctk.StringVar(value="")
     model_name_entry = ctk.CTkEntry(
         self.ai_config_tab, 
@@ -358,7 +358,7 @@ def build_ai_config_tab(self):
     model_name_entry.grid(row=row_start+3, column=1, columnspan=2, padx=5, pady=5, sticky="nsew")
     
     # 5) Temperature
-    create_label_with_help(self, self.ai_config_tab, "Temperature:", "temperature", row_start+4, 0)
+    create_label_with_help(self, self.ai_config_tab, _("Temperature:"), "temperature", row_start+4, 0)
     self.temperature_var = ctk.DoubleVar(value=0.7)
     def update_temp_label(value):
         self.temp_value_label.configure(text=f"{float(value):.2f}")
@@ -379,7 +379,7 @@ def build_ai_config_tab(self):
     self.temp_value_label.grid(row=row_start+4, column=2, padx=5, pady=5, sticky="w")
     
     # 6) Max Tokens
-    create_label_with_help(self, self.ai_config_tab, "Max Tokens:", "max_tokens", row_start+5, 0)
+    create_label_with_help(self, self.ai_config_tab, _("Max Tokens:"), "max_tokens", row_start+5, 0)
     self.max_tokens_var = ctk.IntVar(value=8192)
     def update_max_tokens_label(value):
         self.max_tokens_value_label.configure(text=str(int(float(value))))
@@ -400,7 +400,7 @@ def build_ai_config_tab(self):
     self.max_tokens_value_label.grid(row=row_start+5, column=2, padx=5, pady=5, sticky="w")
     
     # 7) Timeout
-    create_label_with_help(self, self.ai_config_tab, "Timeout (sec):", "timeout", row_start+6, 0)
+    create_label_with_help(self, self.ai_config_tab, _("Timeout (sec):"), "timeout", row_start+6, 0)
     self.timeout_var = ctk.IntVar(value=600)
     def update_timeout_label(value):
         self.timeout_value_label.configure(text=str(int(float(value))))
@@ -423,7 +423,7 @@ def build_ai_config_tab(self):
     # 测试按钮
     test_btn = ctk.CTkButton(
         self.ai_config_tab, 
-        text="测试配置", 
+        text=_("测试配置"), 
         command=self.test_llm_config,
         font=("Microsoft YaHei", 12)
     )
@@ -441,11 +441,11 @@ def build_ai_config_tab(self):
     self.ai_config_tab.grid_columnconfigure(2, weight=0)
 
     # 配置选择控件
-    create_label_with_help(self, self.ai_config_tab, "当前配置", "interface_config", 0, 0)
+    create_label_with_help(self, self.ai_config_tab, _("当前配置"), "interface_config", 0, 0)
     config_names = list(self.loaded_config.get("llm_configs", {}).keys())
     if not config_names:  # 如果没有配置，创建一个默认配置
         self.loaded_config["llm_configs"] = {
-            "默认配置": {
+            _("默认配置"): {
                 "id": str(uuid.uuid4()),
                 "api_key": "",
                 "base_url": "https://api.openai.com/v1",
@@ -457,7 +457,7 @@ def build_ai_config_tab(self):
                 "created_at": datetime.datetime.now().isoformat()
             }
         }
-        config_names = ["默认配置"]
+        config_names = [_("默认配置")]
     
     interface_config_dropdown = ctk.CTkOptionMenu(
         self.ai_config_tab, 
@@ -507,12 +507,12 @@ def build_embeddings_config_tab(self):
     self.embeddings_config_tab.grid_columnconfigure(2, weight=0)
 
     # 1) Embedding API Key
-    create_label_with_help(self, parent=self.embeddings_config_tab, label_text="Embedding API Key:", tooltip_key="embedding_api_key", row=0, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.embeddings_config_tab, label_text=_("Embedding API Key:"), tooltip_key="embedding_api_key", row=0, column=0, font=("Microsoft YaHei", 12))
     emb_api_key_entry = ctk.CTkEntry(self.embeddings_config_tab, textvariable=self.embedding_api_key_var, font=("Microsoft YaHei", 12), show="*")
     emb_api_key_entry.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
 
     # 2) Embedding 接口格式
-    create_label_with_help(self, parent=self.embeddings_config_tab, label_text="Embedding 接口格式:", tooltip_key="embedding_intexrface_format", row=1, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.embeddings_config_tab, label_text=_("Embedding 接口格式:"), tooltip_key="embedding_intexrface_format", row=1, column=0, font=("Microsoft YaHei", 12))
 
     emb_interface_options = ["DeepSeek", "OpenAI", "Azure OpenAI", "Gemini", "Ollama", "ML Studio","SiliconFlow"]
 
@@ -520,22 +520,22 @@ def build_embeddings_config_tab(self):
     emb_interface_dropdown.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
 
     # 3) Embedding Base URL
-    create_label_with_help(self, parent=self.embeddings_config_tab, label_text="Embedding Base URL:", tooltip_key="embedding_url", row=2, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.embeddings_config_tab, label_text=_("Embedding Base URL:"), tooltip_key="embedding_url", row=2, column=0, font=("Microsoft YaHei", 12))
     emb_url_entry = ctk.CTkEntry(self.embeddings_config_tab, textvariable=self.embedding_url_var, font=("Microsoft YaHei", 12))
     emb_url_entry.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
 
     # 4) Embedding Model Name
-    create_label_with_help(self, parent=self.embeddings_config_tab, label_text="Embedding Model Name:", tooltip_key="embedding_model_name", row=3, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.embeddings_config_tab, label_text=_("Embedding Model Name:"), tooltip_key="embedding_model_name", row=3, column=0, font=("Microsoft YaHei", 12))
     emb_model_name_entry = ctk.CTkEntry(self.embeddings_config_tab, textvariable=self.embedding_model_name_var, font=("Microsoft YaHei", 12))
     emb_model_name_entry.grid(row=3, column=1, padx=5, pady=5, sticky="nsew")
 
     # 5) Retrieval Top-K
-    create_label_with_help(self, parent=self.embeddings_config_tab, label_text="Retrieval Top-K:", tooltip_key="embedding_retrieval_k", row=4, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.embeddings_config_tab, label_text=_("Retrieval Top-K:"), tooltip_key="embedding_retrieval_k", row=4, column=0, font=("Microsoft YaHei", 12))
     emb_retrieval_k_entry = ctk.CTkEntry(self.embeddings_config_tab, textvariable=self.embedding_retrieval_k_var, font=("Microsoft YaHei", 12))
     emb_retrieval_k_entry.grid(row=4, column=1, padx=5, pady=5, sticky="nsew")
 
     # 添加测试按钮
-    test_btn = ctk.CTkButton(self.embeddings_config_tab, text="测试配置", command=self.test_embedding_config, font=("Microsoft YaHei", 12))
+    test_btn = ctk.CTkButton(self.embeddings_config_tab, text=_("测试配置"), command=self.test_embedding_config, font=("Microsoft YaHei", 12))
     test_btn.grid(row=5, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
 def build_config_choose_tab(self):
@@ -545,23 +545,23 @@ def build_config_choose_tab(self):
     self.config_choose.grid_columnconfigure(0, weight=0)
     self.config_choose.grid_columnconfigure(1, weight=1)
     config_choose_options = list(self.loaded_config.get("llm_configs", {}).keys())
-    create_label_with_help(self, parent=self.config_choose, label_text="生成架构所用大模型", tooltip_key="architecture_llm_config", row=0, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.config_choose, label_text=_("生成架构所用大模型"), tooltip_key="architecture_llm_config", row=0, column=0, font=("Microsoft YaHei", 12))
     architecture_dropdown = ctk.CTkOptionMenu(self.config_choose, values=config_choose_options, variable=self.architecture_llm_var, font=("Microsoft YaHei", 12))
     architecture_dropdown.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
 
-    create_label_with_help(self, parent=self.config_choose, label_text="生成大目录所用大模型", tooltip_key="chapter_outline_llm_config", row=1, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.config_choose, label_text=_("生成大目录所用大模型"), tooltip_key="chapter_outline_llm_config", row=1, column=0, font=("Microsoft YaHei", 12))
     chapter_outline_dropdown = ctk.CTkOptionMenu(self.config_choose, values=config_choose_options, variable=self.chapter_outline_llm_var, font=("Microsoft YaHei", 12))
     chapter_outline_dropdown.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
 
-    create_label_with_help(self, parent=self.config_choose, label_text="生成草稿所用大模型", tooltip_key="prompt_draft_llm_config", row=2, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.config_choose, label_text=_("生成草稿所用大模型"), tooltip_key="prompt_draft_llm_config", row=2, column=0, font=("Microsoft YaHei", 12))
     prompt_draft_dropdown = ctk.CTkOptionMenu(self.config_choose, values=config_choose_options, variable=self.prompt_draft_llm_var, font=("Microsoft YaHei", 12))
     prompt_draft_dropdown.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
 
-    create_label_with_help(self, parent=self.config_choose, label_text="定稿章节所用大模型", tooltip_key="final_chapter_llm_config", row=3, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.config_choose, label_text=_("定稿章节所用大模型"), tooltip_key="final_chapter_llm_config", row=3, column=0, font=("Microsoft YaHei", 12))
     final_chapter_dropdown = ctk.CTkOptionMenu(self.config_choose, values=config_choose_options, variable=self.final_chapter_llm_var, font=("Microsoft YaHei", 12))
     final_chapter_dropdown.grid(row=3, column=1, padx=5, pady=5, sticky="nsew")
 
-    create_label_with_help(self, parent=self.config_choose, label_text="一致性审校所用大模型", tooltip_key="consistency_review_llm_config", row=4, column=0, font=("Microsoft YaHei", 12))
+    create_label_with_help(self, parent=self.config_choose, label_text=_("一致性审校所用大模型"), tooltip_key="consistency_review_llm_config", row=4, column=0, font=("Microsoft YaHei", 12))
     consistency_review_dropdown = ctk.CTkOptionMenu(self.config_choose, values=config_choose_options, variable=self.consistency_review_llm_var, font=("Microsoft YaHei", 12))
     consistency_review_dropdown.grid(row=4, column=1, padx=5, pady=5, sticky="nsew")
 
@@ -579,7 +579,7 @@ def build_config_choose_tab(self):
         config_data_full = load_config(self.config_file)
         config_data_full["choose_configs"] = config_data
         save_config(config_data_full, self.config_file)
-        messagebox.showinfo("提示", "配置已保存。")
+        messagebox.showinfo(_("提示"), _("配置已保存。"))
 
     def refresh_config_dropdowns():
         """刷新所有配置下拉菜单"""
@@ -591,7 +591,7 @@ def build_config_choose_tab(self):
 
     save_btn = ctk.CTkButton(
         self.config_choose, 
-        text="保存配置", 
+        text=_("保存配置"), 
         command=save_config_choose,
         font=("Microsoft YaHei", 12)
     )
@@ -599,7 +599,7 @@ def build_config_choose_tab(self):
 
     refresh_btn = ctk.CTkButton(
         self.config_choose, 
-        text="刷新配置", 
+        text=_("刷新配置"), 
         command=refresh_config_dropdowns,
         font=("Microsoft YaHei", 12)
     )
@@ -651,9 +651,9 @@ def load_config_btn(self):
         self.key_items_var.set(other_params.get("key_items", ""))
         self.scene_location_var.set(other_params.get("scene_location", ""))
         self.time_constraint_var.set(other_params.get("time_constraint", ""))
-        self.log("已加载配置。")
+        self.log(_("已加载配置。"))
     else:
-        messagebox.showwarning("提示", "未找到或无法读取配置文件。")
+        messagebox.showwarning(_("提示"), _("未找到或无法读取配置文件。"))
 
 def save_config_btn(self):
     current_llm_interface = self.interface_format_var.get().strip()
@@ -708,7 +708,7 @@ def save_config_btn(self):
     existing_config["other_params"] = other_params
 
     if save_config(existing_config, self.config_file):
-        messagebox.showinfo("提示", "配置已保存至 config.json")
-        self.log("配置已保存。")
+        messagebox.showinfo(_("提示"), _("配置已保存至 config.json"))
+        self.log(_("配置已保存。"))
     else:
-        messagebox.showerror("错误", "保存配置失败。")
+        messagebox.showerror(_("错误"), _("保存配置失败。"))

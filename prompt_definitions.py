@@ -7,7 +7,7 @@
 
 # =============== 生成草稿提示词当前章节摘要、知识库提炼 ===============
 # 当前章节摘要生成提示词
-summarize_recent_chapters_prompt = """\
+summarize_recent_chapters_prompt = _("""
 作为一名专业的小说编辑和知识管理专家，正在基于已完成的前三章内容和本章信息生成当前章节的精准摘要。请严格遵循以下工作流程：
 前三章内容：
 {combined_text}
@@ -55,10 +55,10 @@ summarize_recent_chapters_prompt = """\
 
 请按如下格式输出（不需要额外解释）：
 当前章节摘要: <这里写当前章节摘要>
-"""
+""")
 
 # 知识库相关性检索提示词
-knowledge_search_prompt = """\
+knowledge_search_prompt = _("""\
 请基于以下当前写作需求，生成合适的知识库检索关键词：
 
 章节元数据：
@@ -106,10 +106,10 @@ knowledge_search_prompt = """\
 示例：
 科技公司·数据泄露
 地下实验室·基因编辑·禁忌实验
-"""
+""")
 
 # 知识库内容过滤提示词
-knowledge_filter_prompt = """\
+knowledge_filter_prompt = _("""\
 对知识库内容进行三级过滤：
 
 待过滤内容：
@@ -155,10 +155,10 @@ knowledge_filter_prompt = """\
 
 仅给出最终文本，不要解释任何内容。
 提示词：内容
-"""
+""")
 
 # =============== 1. 核心种子设定（雪花第1层）===================
-core_seed_prompt = """\
+core_seed_prompt = _("""\
 作为专业作家，请用"雪花写作法"第一步构建故事核心：
 主题：{topic}
 类型：{genre}
@@ -174,10 +174,10 @@ core_seed_prompt = """\
 4. 使用25-100字精准表达
 
 仅返回故事核心文本，不要解释任何内容。
-"""
+""")
 
 # =============== 2. 角色动力学设定（角色弧光模型）===================
-character_dynamics_prompt = """\
+character_dynamics_prompt = _("""\
 基于以下元素：
 - 内容指导：{user_guidance}
 - 核心种子：{core_seed}
@@ -203,10 +203,10 @@ character_dynamics_prompt = """\
 
 要求：
 仅给出最终文本，不要解释任何内容。
-"""
+""")
 
 # =============== 3. 世界构建矩阵（三维度交织法）===================
-world_building_prompt = """\
+world_building_prompt = _("""\
 基于以下元素：
 - 内容指导：{user_guidance}
 - 核心冲突："{core_seed}"
@@ -231,10 +231,10 @@ world_building_prompt = """\
 要求：
 每个维度至少包含3个可与角色决策产生互动的动态元素。
 仅给出最终文本，不要解释任何内容。
-"""
+""")
 
 # =============== 4. 情节架构（三幕式悬念）===================
-plot_architecture_prompt = """\
+plot_architecture_prompt = _("""\
 基于以下元素：
 - 内容指导：{user_guidance}
 - 核心种子：{core_seed}
@@ -261,10 +261,10 @@ plot_architecture_prompt = """\
 
 每个阶段需包含3个关键转折点及其对应的伏笔回收方案。
 仅给出最终文本，不要解释任何内容。
-"""
+""")
 
 # =============== 5. 章节目录生成（悬念节奏曲线）===================
-chapter_blueprint_prompt = """\
+chapter_blueprint_prompt = _("""\
 基于以下元素：
 - 内容指导：{user_guidance}
 - 小说架构：
@@ -306,9 +306,9 @@ chapter_blueprint_prompt = """\
 - 在生成{number_of_chapters}章前不要出现结局章节。
 
 仅给出最终文本，不要解释任何内容。
-"""
+""")
 
-chunked_chapter_blueprint_prompt = """\
+chunked_chapter_blueprint_prompt = _("""\
 基于以下元素：
 - 内容指导：{user_guidance}
 - 小说架构：
@@ -355,10 +355,10 @@ chunked_chapter_blueprint_prompt = """\
 - 在生成{number_of_chapters}章前不要出现结局章节。
 
 仅给出最终文本，不要解释任何内容。
-"""
+""")
 
 # =============== 6. 前文摘要更新 ===================
-summary_prompt = """\
+summary_prompt = _("""\
 以下是新完成的章节文本：
 {chapter_text}
 
@@ -373,10 +373,10 @@ summary_prompt = """\
 - 总字数控制在2000字以内
 
 仅返回前文摘要文本，不要解释任何内容。
-"""
+""")
 
 # =============== 7. 角色状态更新 ===================
-create_character_state_prompt = """\
+create_character_state_prompt = _("""\
 依据当前角色动力学设定：{character_dynamics}
 
 请生成一个角色状态文档，内容格式：
@@ -425,9 +425,9 @@ create_character_state_prompt = """\
 
 要求：
 仅返回编写好的角色状态文本，不要解释任何内容。
-"""
+""")
 
-update_character_state_prompt = """\
+update_character_state_prompt = _("""\
 以下是新完成的章节文本：
 {chapter_text}
 
@@ -485,12 +485,12 @@ update_character_state_prompt = """\
 - 不改变原有结构，语言尽量简洁、有条理
 
 仅返回更新后的角色状态文本，不要解释任何内容。
-"""
+""")
 
 # =============== 8. 章节正文写作 ===================
 
 # 8.1 第一章草稿提示
-first_chapter_draft_prompt = """\
+first_chapter_draft_prompt = _("""\
 即将创作：第 {novel_number} 章《{chapter_title}》
 本章定位：{chapter_role}
 核心作用：{chapter_purpose}
@@ -535,10 +535,10 @@ first_chapter_draft_prompt = """\
 - 不要使用markdown格式。
 
 额外指导(可能未指定)：{user_guidance}
-"""
+""")
 
 # 8.2 后续章节草稿提示
-next_chapter_draft_prompt = """\
+next_chapter_draft_prompt = _("""\
 参考文档：
 └── 前文摘要：
     {global_summary}
@@ -621,9 +621,9 @@ next_chapter_draft_prompt = """\
 - 仅返回章节正文文本；
 - 不使用分章节小标题；
 - 不要使用markdown格式。
-"""
+""")
 
-Character_Import_Prompt = """\
+Character_Import_Prompt = _("""\
 根据以下文本内容，分析出所有角色及其属性信息，严格按照以下格式要求：
 
 <<角色状态格式要求>>
@@ -662,4 +662,4 @@ Character_Import_Prompt = """\
 <<待分析小说文本开始>>
 {content}
 <<待分析小说文本结束>>
-"""
+""")

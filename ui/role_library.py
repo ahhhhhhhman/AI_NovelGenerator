@@ -24,7 +24,7 @@ class RoleLibrary:
 
         # 初始化窗口
         self.window = ctk.CTkToplevel(master)
-        self.window.title("角色库管理")
+        self.window.title(_("角色库管理"))
         self.window.geometry("1200x800")
         self.window.protocol("WM_DELETE_WINDOW", self.on_close)
 
@@ -87,7 +87,7 @@ class RoleLibrary:
         category_frame.pack(fill="x", padx=5, pady=5)
 
         # 分类选择标签
-        ctk.CTkLabel(category_frame, text="分类选择", font=DEFAULT_FONT).pack(side="left", padx=(0, 5))
+        ctk.CTkLabel(category_frame, text=_("分类选择"), font=DEFAULT_FONT).pack(side="left", padx=(0, 5))
 
         # 分类选择框
         self.category_combobox = ctk.CTkComboBox(
@@ -101,7 +101,7 @@ class RoleLibrary:
         # 分类保存按钮
         self.save_category_btn = ctk.CTkButton(
             category_frame,
-            text="保存分类",
+            text=_("保存分类"),
             width=80,
             command=self._move_to_category,
             font=DEFAULT_FONT
@@ -111,7 +111,7 @@ class RoleLibrary:
         # 打开文件夹按钮
         ctk.CTkButton(
             category_frame,
-            text="打开文件夹",
+            text=_("打开文件夹"),
             width=80,
             command=lambda: os.startfile(
                 os.path.join(self.save_path, self.category_combobox.get())),
@@ -123,13 +123,13 @@ class RoleLibrary:
         name_frame.pack(fill="x", padx=5, pady=5)
 
         # 角色名称标签
-        ctk.CTkLabel(name_frame, text="角色名称", font=DEFAULT_FONT).pack(side="left", padx=(0, 5))
+        ctk.CTkLabel(name_frame, text=_("角色名称"), font=DEFAULT_FONT).pack(side="left", padx=(0, 5))
 
         self.role_name_var = tk.StringVar()
         self.role_name_entry = ctk.CTkEntry(
             name_frame,
             textvariable=self.role_name_var,
-            placeholder_text="角色名称",
+            placeholder_text=_("角色名称"),
             width=200,
             font=DEFAULT_FONT
         )
@@ -137,7 +137,7 @@ class RoleLibrary:
 
         ctk.CTkButton(
             name_frame,
-            text="修改",
+            text=_("修改"),
             width=60,
             command=self._rename_role_file,
             font=DEFAULT_FONT
@@ -145,7 +145,7 @@ class RoleLibrary:
 
         ctk.CTkButton(
             name_frame,
-            text="新增",
+            text=_("新增"),
             width=60,
             command=lambda: self._create_new_role("全部"),
             font=DEFAULT_FONT
@@ -160,11 +160,11 @@ class RoleLibrary:
         button_frame = ctk.CTkFrame(right_panel)
         button_frame.pack(fill="x", padx=5, pady=5)
 
-        ctk.CTkButton(button_frame, text="导入角色",
+        ctk.CTkButton(button_frame, text=_("导入角色"),
                       command=self.import_roles, font=DEFAULT_FONT).pack(side="left", padx=5)
-        ctk.CTkButton(button_frame, text="删除",
+        ctk.CTkButton(button_frame, text=_("删除"),
                       command=self.delete_current_role, font=DEFAULT_FONT).pack(side="left", padx=5)
-        ctk.CTkButton(button_frame, text="保存",
+        ctk.CTkButton(button_frame, text=_("保存"),
                       command=self.save_current_role, font=DEFAULT_FONT).pack(side="left", padx=5)
 
     def _get_all_categories(self):
@@ -178,7 +178,7 @@ class RoleLibrary:
     def _move_to_category(self):
         """分类转移功能"""
         if not hasattr(self, 'current_role') or not self.current_role:
-            messagebox.showwarning("警告", "请先选择一个角色", parent=self.window)
+            messagebox.showwarning(_("警告"), _("请先选择一个角色"), parent=self.window)
             return
 
         new_category = self.category_combobox.get()
@@ -195,7 +195,7 @@ class RoleLibrary:
                     break
 
             if not actual_category:
-                msg = messagebox.showerror("错误", f"找不到角色 {self.current_role} 的实际存储位置", parent=self.window)
+                msg = messagebox.showerror(_("错误"), _(f"找不到角色 {self.current_role} 的实际存储位置"), parent=self.window)
                 self.window.attributes('-topmost', 1)
                 msg.attributes('-topmost', 1)
                 self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
@@ -217,14 +217,14 @@ class RoleLibrary:
 
         # 检查是否已经在目标分类
         if os.path.exists(new_path):
-            msg = messagebox.showinfo("提示", "角色已在目标分类中", parent=self.window)
+            msg = messagebox.showinfo(_("提示"), _("角色已在目标分类中"), parent=self.window)
             self.window.attributes('-topmost', 1)
             msg.attributes('-topmost', 1)
             self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
             return
 
         confirm = messagebox.askyesno(
-            "确认", f"确定要将角色 {self.current_role} 移动到 {new_category} 分类吗？", parent=self.window)
+            _("确认"), _(f"确定要将角色 {self.current_role} 移动到 {new_category} 分类吗？"), parent=self.window)
         if not confirm:
             return
 
@@ -242,7 +242,7 @@ class RoleLibrary:
                 self.category_combobox.set(new_category)
                 
                 # 成功提示
-                messagebox.showinfo("成功", "分类已更新", parent=self.window)
+                messagebox.showinfo(_("成功"), _("分类已更新"), parent=self.window)
                 return  # 成功时直接返回
                 
             except Exception as e:
@@ -250,7 +250,7 @@ class RoleLibrary:
                 self.category_combobox.set(self.selected_category)
                 raise e
         except Exception as e:
-            msg = messagebox.showerror("错误", f"分类转移失败：{str(e)}", parent=self.window)
+            msg = messagebox.showerror(_("错误"), _(f"分类转移失败：{str(e)}"), parent=self.window)
             self.window.attributes('-topmost', 1)
             msg.attributes('-topmost', 1)
             self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
@@ -259,7 +259,7 @@ class RoleLibrary:
     def import_roles(self):
         """导入角色窗口"""
         import_window = ctk.CTkToplevel(self.window)
-        import_window.title("角色导入")
+        import_window.title(_("角色导入"))
         import_window.geometry("800x600")
         import_window.transient(self.window)  # 设置为子窗口
         import_window.grab_set()  # 模态窗口
@@ -311,7 +311,7 @@ class RoleLibrary:
         # 导入按钮
         ctk.CTkButton(
             btn_frame,
-            text="导入临时角色库",
+            text=_("导入临时角色库"),
             width=120,
             command=lambda: self.confirm_import(import_window),
             font=DEFAULT_FONT
@@ -320,7 +320,7 @@ class RoleLibrary:
         # 分析文件按钮
         ctk.CTkButton(
             btn_frame,
-            text="分析文件",
+            text=_("分析文件"),
             width=100,
             command=lambda: self.analyze_character_state(right_panel, left_panel),
             font=DEFAULT_FONT
@@ -329,7 +329,7 @@ class RoleLibrary:
         # 加载character_state.txt按钮
         ctk.CTkButton(
             btn_frame,
-            text="加载character_state.txt",
+            text=_("加载character_state.txt"),
             width=160,
             command=lambda: self.load_default_character_state(right_panel),
             font=DEFAULT_FONT
@@ -338,7 +338,7 @@ class RoleLibrary:
         # 从文件导入按钮
         ctk.CTkButton(
             btn_frame,
-            text="从文件导入",
+            text=_("从文件导入"),
             width=100,
             command=lambda: self.import_from_file(right_panel),
             font=DEFAULT_FONT
@@ -356,7 +356,7 @@ class RoleLibrary:
                 break
         
         if not content:
-            messagebox.showwarning("警告", "未找到可分析的内容", parent=self.window)
+            messagebox.showwarning(_("警告"), _("未找到可分析的内容"), parent=self.window)
             return
 
         try:
@@ -384,14 +384,14 @@ class RoleLibrary:
             roles = self._parse_llm_response(response)
             
             if not roles:
-                messagebox.showwarning("警告", "未解析到有效角色信息", parent=self.window)
+                messagebox.showwarning(_("警告"), _("未解析到有效角色信息"), parent=self.window)
                 return
 
             # 直接显示分析结果而不保存到文件
             self._display_analyzed_roles(left_panel, roles)
 
         except Exception as e:
-            messagebox.showerror("分析失败", f"LLM分析出错：{str(e)}", parent=self.window)
+            messagebox.showerror(_("分析失败"), _(f"LLM分析出错：{str(e)}"), parent=self.window)
 
     def _display_temp_roles(self, parent, temp_dir):
         """显示临时角色库中的角色"""
@@ -442,9 +442,9 @@ class RoleLibrary:
         # 添加操作按钮
         btn_frame = ctk.CTkFrame(scroll_frame)
         btn_frame.pack(fill="x", pady=5)
-        ctk.CTkButton(btn_frame, text="全选", 
+        ctk.CTkButton(btn_frame, text=_("全选"), 
                      command=lambda: self._toggle_all(True), font=DEFAULT_FONT).pack(side="left")
-        ctk.CTkButton(btn_frame, text="取消选择", 
+        ctk.CTkButton(btn_frame, text=_("取消选择"), 
                      command=lambda: self._toggle_all(False), font=DEFAULT_FONT).pack(side="left")
 
     def _parse_temp_role_file(self, file_path):
@@ -466,7 +466,7 @@ class RoleLibrary:
                             item = line.split(prefix)[1].strip()
                             attributes[current_attr].append(item)
         except Exception as e:
-            messagebox.showerror("解析错误", f"解析临时文件失败：{str(e)}", parent=self.window)
+            messagebox.showerror(_("解析错误"), _(f"解析临时文件失败：{str(e)}"), parent=self.window)
         return attributes
 
     def _parse_llm_response(self, response):
@@ -569,9 +569,9 @@ class RoleLibrary:
         btn_frame = ctk.CTkFrame(scroll_frame)
         btn_frame.pack(fill="x", pady=5)
         
-        ctk.CTkButton(btn_frame, text="全选", 
+        ctk.CTkButton(btn_frame, text=_("全选"), 
                      command=lambda: self._toggle_all(True), font=DEFAULT_FONT).pack(side="left")
-        ctk.CTkButton(btn_frame, text="反选", 
+        ctk.CTkButton(btn_frame, text=_("反选"), 
                      command=lambda: self._toggle_all(False), font=DEFAULT_FONT).pack(side="left")
 
     def _toggle_all(self, select):
@@ -588,13 +588,13 @@ class RoleLibrary:
     def import_from_file(self, right_panel):
         """从文件导入内容到右侧窗口"""
         filetypes = (
-            ('文本文件', '*.txt'),
-            ('Word文档', '*.docx'),
-            ('所有文件', '*.*')
+            (_('文本文件'), '*.txt'),
+            (_('Word文档'), '*.docx'),
+            (_('所有文件'), '*.*')
         )
         
         file_path = filedialog.askopenfilename(
-            title="选择要导入的文件",
+            title=_("选择要导入的文件"),
             initialdir=os.path.expanduser("~"),
             filetypes=filetypes
         )
@@ -622,7 +622,7 @@ class RoleLibrary:
                     break
 
         except Exception as e:
-            messagebox.showerror("导入失败", f"无法读取文件：{str(e)}", parent=self.window)
+            messagebox.showerror(_("导入失败"), _(f"无法读取文件：{str(e)}"), parent=self.window)
 
     def load_default_character_state(self, right_panel):
         """加载character_state.txt文件到右侧窗口"""
@@ -631,7 +631,7 @@ class RoleLibrary:
         file_path = os.path.join(save_path, "character_state.txt")
 
         if not os.path.exists(file_path):
-            messagebox.showwarning("警告", f"未找到文件: {file_path}", parent=self.window)
+            messagebox.showwarning(_("警告"), _(f"未找到文件: {file_path}"), parent=self.window)
             return
 
         try:
@@ -662,7 +662,7 @@ class RoleLibrary:
             right_panel.grid_columnconfigure(0, weight=1)
 
         except Exception as e:
-            messagebox.showerror("错误", f"加载文件失败: {str(e)}", parent=self.window)
+            messagebox.showerror(_("错误"), _(f"加载文件失败: {str(e)}"), parent=self.window)
 
     def confirm_import(self, import_window):
         """从临时角色库导入选中的角色"""
@@ -678,13 +678,13 @@ class RoleLibrary:
             if not selected_roles:
                 # 创建错误提示窗口
                 error_window = ctk.CTkToplevel(import_window)
-                error_window.title("错误")
+                error_window.title(_("错误"))
                 error_window.transient(import_window)
                 error_window.grab_set()
                 
                 # 窗口内容
-                ctk.CTkLabel(error_window, text="请至少选择一个角色", font=DEFAULT_FONT).pack(padx=20, pady=10)
-                ctk.CTkButton(error_window, text="确定", command=error_window.destroy, font=DEFAULT_FONT).pack(pady=10)
+                ctk.CTkLabel(error_window, text=_("请至少选择一个角色"), font=DEFAULT_FONT).pack(padx=20, pady=10)
+                ctk.CTkButton(error_window, text=_("确定"), command=error_window.destroy, font=DEFAULT_FONT).pack(pady=10)
                 
                 # 窗口居中
                 error_window.update_idletasks()
@@ -728,7 +728,7 @@ class RoleLibrary:
             return
 
         confirm = messagebox.askyesno(
-            "确认删除", f"确定要删除角色 {self.current_role} 吗？", parent=self.window)
+            _("确认删除"), _(f"确定要删除角色 {self.current_role} 吗？"), parent=self.window)
         if not confirm:
             return
 
@@ -743,12 +743,12 @@ class RoleLibrary:
                 os.remove(all_path)
             self.show_category(self.selected_category)
             self.preview_text.delete("1.0", "end")
-            msg = messagebox.showinfo("成功", "角色已删除", parent=self.window)
+            msg = messagebox.showinfo(_("成功"), _("角色已删除"), parent=self.window)
             self.window.attributes('-topmost', 1)
             msg.attributes('-topmost', 1)
             self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
         except Exception as e:
-            msg = messagebox.showerror("错误", f"删除失败：{str(e)}", parent=self.window)
+            msg = messagebox.showerror(_("错误"), _(f"删除失败：{str(e)}"), parent=self.window)
             self.window.attributes('-topmost', 1)
             msg.attributes('-topmost', 1)
             self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
@@ -809,7 +809,7 @@ class RoleLibrary:
 
         new_name = self.role_name_var.get().strip()
         if not new_name:
-            msg = messagebox.showwarning("警告", "角色名称不能为空", parent=self.window)
+            msg = messagebox.showwarning(_("警告"), _("角色名称不能为空"), parent=self.window)
             self.window.attributes('-topmost', 1)
             msg.attributes('-topmost', 1)
             self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
@@ -819,10 +819,10 @@ class RoleLibrary:
         if new_name != self.current_role:
             conflicts = self._check_role_name_conflict(new_name)
             if conflicts:
-                messagebox.showerror("错误",       
-                                    f"角色名称 '{new_name}' 已存在于以下分类中：\n" +
+                messagebox.showerror(_("错误"),       
+                                    _(f"角色名称 '{new_name}' 已存在于以下分类中：\n") +
                                     "\n".join(conflicts) +
-                                    "\n请使用不同的角色名称", parent=self.window)
+                                    _("请使用不同的角色名称"), parent=self.window)
                 return
 
         content = self._build_role_content()
@@ -841,9 +841,9 @@ class RoleLibrary:
             self.current_role = new_name
             self.show_category(self.selected_category)
             self.show_role(new_name)  # 刷新角色显示
-            messagebox.showinfo("成功", "角色已保存", parent=self.window)
+            messagebox.showinfo(_("成功"), _("角色已保存"), parent=self.window)
         except Exception as e:
-            messagebox.showerror("错误", f"保存失败：{str(e)}", parent=self.window)
+            messagebox.showerror(_("错误"), _(f"保存失败：{str(e)}"), parent=self.window)
 
     def _rename_role_file(self):
         """修改角色名称"""
@@ -865,10 +865,10 @@ class RoleLibrary:
         # 检查角色名是否重复
         conflicts = self._check_role_name_conflict(new_name)
         if conflicts:
-            messagebox.showerror("错误",
-                                f"角色名称 '{new_name}' 已存在于以下分类中：\n" +
+            messagebox.showerror(_("错误"),
+                                _(f"角色名称 '{new_name}' 已存在于以下分类中：\n") +
                                 "\n".join(conflicts) +
-                                "\n请使用不同的角色名称", parent=self.window)
+                                _("请使用不同的角色名称"), parent=self.window)
             return
 
         try:
@@ -946,7 +946,7 @@ class RoleLibrary:
                     # 删除旧文件
                     os.remove(all_old_path)
                 except Exception as e:
-                    messagebox.showerror("错误", f"更新全部目录失败: {str(e)}", parent=self.window)
+                    messagebox.showerror(_("错误"), _(f"更新全部目录失败: {str(e)}"), parent=self.window)
                     # 回滚重命名操作
                     os.rename(new_path, old_path)
                     return
@@ -958,7 +958,7 @@ class RoleLibrary:
             self.show_role(new_name)  # 刷新角色显示区域
 
         except Exception as e:
-            msg = messagebox.showerror("错误", f"重命名失败：{str(e)}", parent=self.window)
+            msg = messagebox.showerror(_("错误"), _(f"重命名失败：{str(e)}"), parent=self.window)
             self.window.attributes('-topmost', 1)
             msg.attributes('-topmost', 1)
             self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
@@ -1003,12 +1003,12 @@ class RoleLibrary:
 
         # 操作提示
         ctk.CTkLabel(category_frame,
-                     text="右键分类名即可重命名",
+                     text=_("右键分类名即可重命名"),
                      font=DEFAULT_FONT,
                      text_color="gray").pack(side="top", anchor="w", padx=5)
 
         # 固定按钮
-        ctk.CTkButton(category_frame, text="全部", width=50,
+        ctk.CTkButton(category_frame, text=_("全部"), width=50,
                       font=("Microsoft YaHei", 12),
                       command=lambda: self.show_category("全部")).pack(side="left", padx=2)
 
@@ -1018,9 +1018,9 @@ class RoleLibrary:
         self.scroll_frame.pack(side="left", fill="x", expand=True, padx=5)
 
         # 操作按钮
-        ctk.CTkButton(category_frame, text="新增", width=50,
+        ctk.CTkButton(category_frame, text=_("新增"), width=50,
                       command=self.add_category, font=DEFAULT_FONT).pack(side="right", padx=2)
-        ctk.CTkButton(category_frame, text="删除", width=50,
+        ctk.CTkButton(category_frame, text=_("删除"), width=50,
                       command=self.delete_category, font=DEFAULT_FONT).pack(side="right", padx=2)
 
         self.load_categories()
@@ -1072,7 +1072,7 @@ class RoleLibrary:
             return
 
         del_window = ctk.CTkToplevel(self.window)
-        del_window.title("删除分类")
+        del_window.title(_("删除分类"))
         del_window.transient(self.window)
         del_window.grab_set()
         del_window.attributes('-topmost', 1)
@@ -1102,9 +1102,9 @@ class RoleLibrary:
         btn_frame = ctk.CTkFrame(del_window)
         btn_frame.pack(fill="x", pady=5)
 
-        ctk.CTkButton(btn_frame, text="删除选中",
+        ctk.CTkButton(btn_frame, text=_("删除选中"),
                       command=lambda: self.confirm_delete(del_window), font=DEFAULT_FONT).pack(side="left", padx=5)
-        ctk.CTkButton(btn_frame, text="取消",
+        ctk.CTkButton(btn_frame, text=_("取消"),
                       command=del_window.destroy, font=DEFAULT_FONT).pack(side="right", padx=5)
 
         self.category_combobox.configure(values=self._get_all_categories())
@@ -1114,7 +1114,7 @@ class RoleLibrary:
         """确认删除操作"""
         selected = [item[0] for item in self.selected_del if item[1].get()]
         if not selected:
-            msg = messagebox.showwarning("警告", "请至少选择一个分类", parent=self.window)
+            msg = messagebox.showwarning(_("警告"), _("请至少选择一个分类"), parent=self.window)
             self.window.attributes('-topmost', 1)
             self.window.after(200, lambda: self.window.attributes('-topmost', 0))
             return
@@ -1134,7 +1134,7 @@ class RoleLibrary:
         y = self.window.winfo_y() + (self.window.winfo_height() - c_height) // 2
         choice_window.geometry(f"+{x}+{y}")
 
-        ctk.CTkLabel(choice_window, text="请选择删除方式：", font=DEFAULT_FONT).pack(pady=10)
+        ctk.CTkLabel(choice_window, text=_("请选择删除方式："), font=DEFAULT_FONT).pack(pady=10)
         btn_frame = ctk.CTkFrame(choice_window)
         btn_frame.pack(pady=10)
 
@@ -1159,9 +1159,9 @@ class RoleLibrary:
             original_window.destroy()
             choice_window.destroy()
 
-        ctk.CTkButton(btn_frame, text="全部删除",
+        ctk.CTkButton(btn_frame, text=_("全部删除"),
                       command=lambda: perform_delete("all"), font=DEFAULT_FONT).pack(side="left", padx=5)
-        ctk.CTkButton(btn_frame, text="移动角色",
+        ctk.CTkButton(btn_frame, text=_("移动角色"),
                       command=lambda: perform_delete("move"), font=DEFAULT_FONT).pack(side="left", padx=5)
 
     def count_roles(self, categories):
@@ -1221,7 +1221,7 @@ class RoleLibrary:
                         )
                         btn.pack(fill="x", pady=2)
             except FileNotFoundError:
-                messagebox.showerror("错误", "分类目录不存在", parent=self.window)
+                messagebox.showerror(_("错误"), _("分类目录不存在"), parent=self.window)
 
     def show_role(self, role_name):
         """显示角色详细信息（支持UTF-8/ANSI编码）"""
@@ -1311,9 +1311,9 @@ class RoleLibrary:
                 self._create_attribute_section(attr_name, items)
 
         except FileNotFoundError as e:
-            messagebox.showerror("错误", f"文件不存在：{e}", parent=self.window)
+            messagebox.showerror(_("错误"), _(f"文件不存在：{e}"), parent=self.window)
         except Exception as e:
-            messagebox.showerror("错误", f"读取文件失败：{e}", parent=self.window)
+            messagebox.showerror(_("错误"), _(f"读取文件失败：{e}"), parent=self.window)
 
     def _create_attribute_section(self, attr_name, items):
         """创建单个属性的编辑区域"""
@@ -1347,7 +1347,7 @@ class RoleLibrary:
         # “增加”按钮
         add_button = ctk.CTkButton(
             add_button_frame,
-            text="+",
+            text=_("+"),
             width=30,
             command=lambda: self._add_item(attr_name),
             font=DEFAULT_FONT
@@ -1393,7 +1393,7 @@ class RoleLibrary:
         # “删除”按钮
         del_button = ctk.CTkButton(
             del_button_frame,
-            text="-",
+            text=_("-"),
             width=30,
             command=lambda f=item_frame: self._remove_item(f, attr_name),
             font=DEFAULT_FONT
@@ -1419,7 +1419,7 @@ class RoleLibrary:
             if isinstance(child, ctk.CTkFrame):
                 for btn in child.winfo_children():
                     if isinstance(btn, ctk.CTkButton) and btn.cget("text") == "+":
-                        msg = messagebox.showinfo("提示", "不能删除带'+'号的原始条目", parent=self.window)
+                        msg = messagebox.showinfo(_("提示"), _("不能删除带'+'号的原始条目"), parent=self.window)
                         self.window.attributes('-topmost', 1)
                         msg.attributes('-topmost', 1)
                         self.window.after(200, lambda: [self.window.attributes('-topmost', 0), msg.attributes('-topmost', 0)])
@@ -1478,7 +1478,7 @@ class RoleLibrary:
 
         # 创建对话框窗口
         dialog = ctk.CTkToplevel(self.window)
-        dialog.title("重命名分类")
+        dialog.title(_("重命名分类"))
         dialog.transient(self.window)
         dialog.grab_set()
 
@@ -1487,13 +1487,13 @@ class RoleLibrary:
         content_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         # 顶部提示
-        ctk.CTkLabel(content_frame, text=f"当前分类：{old_name}", 
+        ctk.CTkLabel(content_frame, text=_(f"当前分类：{old_name}"), 
                     font=DEFAULT_FONT).pack(pady=(10, 5))
 
         # 输入框
         input_frame = ctk.CTkFrame(content_frame)
         input_frame.pack(fill="x", pady=5)
-        ctk.CTkLabel(input_frame, text="新名称：", 
+        ctk.CTkLabel(input_frame, text=_("新名称："), 
                     font=DEFAULT_FONT).pack(side="left", padx=5)
         name_var = tk.StringVar()
         name_entry = ctk.CTkEntry(input_frame, textvariable=name_var, width=150, font=DEFAULT_FONT)
@@ -1507,13 +1507,13 @@ class RoleLibrary:
             nonlocal new_name  # 引用外部变量
             new_name = name_var.get().strip()
             if not new_name:
-                messagebox.showwarning("警告", "分类名称不能为空", parent=self.window)
+                messagebox.showwarning(_("警告"), _("分类名称不能为空"), parent=self.window)
                 return
             if new_name == old_name:
                 dialog.destroy()
                 return
             if os.path.exists(os.path.join(self.save_path, new_name)):
-                messagebox.showerror("错误", "分类名称已存在", parent=self.window)
+                messagebox.showerror(_("错误"), _("分类名称已存在"), parent=self.window)
                 return
 
             try:
@@ -1526,11 +1526,11 @@ class RoleLibrary:
                 self.category_combobox.set(new_name)
                 dialog.destroy()
             except Exception as e:
-                messagebox.showerror("错误", f"重命名失败：{str(e)}", parent=self.window)
+                messagebox.showerror(_("错误"), _(f"重命名失败：{str(e)}"), parent=self.window)
 
-        ctk.CTkButton(button_frame, text="确认",
+        ctk.CTkButton(button_frame, text=_("确认"),
                       command=confirm_rename, font=DEFAULT_FONT).pack(side="left", padx=10)
-        ctk.CTkButton(button_frame, text="取消",
+        ctk.CTkButton(button_frame, text=_("取消"),
                       command=dialog.destroy, font=DEFAULT_FONT).pack(side="right", padx=10)
 
         # 窗口居中

@@ -30,7 +30,7 @@ def test_llm_config(interface_format, api_key, base_url, model_name, temperature
     """测试当前的LLM配置是否可用"""
     def task():
         try:
-            log_func("开始测试LLM配置...")
+            log_func(_("开始测试LLM配置..."))
             llm_adapter = create_llm_adapter(
                 interface_format=interface_format,
                 base_url=base_url,
@@ -44,13 +44,13 @@ def test_llm_config(interface_format, api_key, base_url, model_name, temperature
             test_prompt = "Please reply 'OK'"
             response = llm_adapter.invoke(test_prompt)
             if response:
-                log_func("✅ LLM配置测试成功！")
+                log_func(_("✅ LLM配置测试成功！"))
                 log_func(f"测试回复: {response}")
             else:
-                log_func("❌ LLM配置测试失败：未获取到响应")
+                log_func(_("❌ LLM配置测试失败：未获取到响应"))
         except Exception as e:
-            log_func(f"❌ LLM配置测试出错: {str(e)}")
-            handle_exception_func("测试LLM配置时出错")
+            log_func(_(f"❌ LLM配置测试出错: {str(e)}"))
+            handle_exception_func(_("测试LLM配置时出错"))
 
     threading.Thread(target=task, daemon=True).start()
 
@@ -58,7 +58,7 @@ def test_embedding_config(api_key, base_url, interface_format, model_name, log_f
     """测试当前的Embedding配置是否可用"""
     def task():
         try:
-            log_func("开始测试Embedding配置...")
+            log_func(_("开始测试Embedding配置..."))
             embedding_adapter = create_embedding_adapter(
                 interface_format=interface_format,
                 api_key=api_key,
@@ -69,12 +69,12 @@ def test_embedding_config(api_key, base_url, interface_format, model_name, log_f
             test_text = "测试文本"
             embeddings = embedding_adapter.embed_query(test_text)
             if embeddings and len(embeddings) > 0:
-                log_func("✅ Embedding配置测试成功！")
-                log_func(f"生成的向量维度: {len(embeddings)}")
+                log_func(_("✅ Embedding配置测试成功！"))
+                log_func(_(f"生成的向量维度: {len(embeddings)}"))
             else:
-                log_func("❌ Embedding配置测试失败：未获取到向量")
+                log_func(_("❌ Embedding配置测试失败：未获取到向量"))
         except Exception as e:
-            log_func(f"❌ Embedding配置测试出错: {str(e)}")
-            handle_exception_func("测试Embedding配置时出错")
+            log_func(_(f"❌ Embedding配置测试出错: {str(e)}"))
+            handle_exception_func(_("测试Embedding配置时出错"))
 
     threading.Thread(target=task, daemon=True).start()
