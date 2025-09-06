@@ -244,7 +244,7 @@ def generate_chapter_draft_ui(self):
                 def update_word_count(event=None):
                     text = text_box.get("0.0", "end-1c")
                     text_length = len(text)
-                    wordcount_label.configure(text=_("字数：{text_length}"))
+                    wordcount_label.configure(text=_(f"字数：{text_length}"))
 
                 text_box.bind("<KeyRelease>", update_word_count)
                 text_box.bind("<ButtonRelease>", update_word_count)
@@ -547,6 +547,7 @@ def generate_batch_ui(self):
             max_tokens=draft_max_tokens,
             timeout=draft_timeout,
         )
+        self.safe_log(_(f"第{i}章请求提示词构建完成，开始生成草稿..."))
         final_prompt = prompt_text
         role_names = [name.strip() for name in self.char_inv_text.get("0.0", "end").split("\n")]
         role_lib_path = os.path.join(self.filepath_var.get().strip(), _("角色库"))
@@ -608,7 +609,7 @@ def generate_batch_ui(self):
             timeout=draft_timeout,
             custom_prompt_text=final_prompt  
         )
-
+        self.safe_log(_(f"第{i}章草稿生成完成，开始定稿..."))
         finalize_interface_format = self.loaded_config["llm_configs"][self.final_chapter_llm_var.get()]["interface_format"]
         finalize_api_key = self.loaded_config["llm_configs"][self.final_chapter_llm_var.get()]["api_key"]
         finalize_base_url = self.loaded_config["llm_configs"][self.final_chapter_llm_var.get()]["base_url"]
@@ -633,6 +634,7 @@ def generate_batch_ui(self):
                 max_tokens=draft_max_tokens,
                 timeout=draft_timeout
             )
+            self.safe_log(_(f"第{i}章扩写完成，开始定稿..."))
             draft_text = enriched
         clear_file_content(chapter_path)
         save_string_to_txt(draft_text, chapter_path)
@@ -653,7 +655,7 @@ def generate_batch_ui(self):
             timeout=finalize_timeout
         )
 
-
+        self.safe_log(_(f"第{i}章定稿完成"))
     result = open_batch_dialog()
     if result["close"]:
         return

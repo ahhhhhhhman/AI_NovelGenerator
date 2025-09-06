@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-09-05 15:22+0800\n"
+"POT-Creation-Date: 2025-09-05 17:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -923,8 +923,8 @@ msgstr ""
 #: ui/generation_handlers.py:26 ui/generation_handlers.py:82
 #: ui/generation_handlers.py:128 ui/generation_handlers.py:316
 #: ui/generation_handlers.py:402 ui/generation_handlers.py:483
-#: ui/generation_handlers.py:736 ui/generation_handlers.py:739
-#: ui/generation_handlers.py:751 ui/main_window.py:349 ui/role_library.py:181
+#: ui/generation_handlers.py:738 ui/generation_handlers.py:741
+#: ui/generation_handlers.py:753 ui/main_window.py:349 ui/role_library.py:181
 #: ui/role_library.py:359 ui/role_library.py:387 ui/role_library.py:634
 #: ui/role_library.py:812 ui/role_library.py:1117 ui/role_library.py:1510
 #: ui/setting_tab.py:39 ui/setting_tab.py:50 ui/summary_tab.py:41
@@ -1018,7 +1018,7 @@ msgstr ""
 #: ui/config_tab.py:93 ui/config_tab.py:120 ui/config_tab.py:138
 #: ui/config_tab.py:140 ui/config_tab.py:146 ui/config_tab.py:196
 #: ui/config_tab.py:202 ui/config_tab.py:220 ui/config_tab.py:714
-#: ui/generation_handlers.py:731 ui/other_settings.py:50
+#: ui/generation_handlers.py:733 ui/other_settings.py:50
 #: ui/other_settings.py:63 ui/other_settings.py:76 ui/role_library.py:198
 #: ui/role_library.py:253 ui/role_library.py:665 ui/role_library.py:681
 #: ui/role_library.py:751 ui/role_library.py:822 ui/role_library.py:846
@@ -1252,7 +1252,7 @@ msgid "生成章节蓝图时出错"
 msgstr ""
 
 #: ui/generation_handlers.py:128 ui/generation_handlers.py:316
-#: ui/generation_handlers.py:402 ui/generation_handlers.py:736
+#: ui/generation_handlers.py:402 ui/generation_handlers.py:738
 msgid "请先配置保存文件路径。"
 msgstr ""
 
@@ -1260,46 +1260,41 @@ msgstr ""
 msgid "当前章节请求提示词（可编辑）"
 msgstr ""
 
-#: ui/generation_handlers.py:203 ui/generation_handlers.py:552
+#: ui/generation_handlers.py:203 ui/generation_handlers.py:553
 #: ui/main_window.py:273 ui/novel_params_tab.py:132
 msgid "角色库"
 msgstr ""
 
-#: ui/generation_handlers.py:221 ui/generation_handlers.py:568
+#: ui/generation_handlers.py:221 ui/generation_handlers.py:569
 #, python-brace-format
 msgid "核心人物(可能未指定)：{characters_involved}"
 msgstr ""
 
-#: ui/generation_handlers.py:222 ui/generation_handlers.py:569
+#: ui/generation_handlers.py:222 ui/generation_handlers.py:570
 #, python-brace-format
 msgid "核心人物：{characters_involved}"
 msgstr ""
 
-#: ui/generation_handlers.py:223 ui/generation_handlers.py:570
+#: ui/generation_handlers.py:223 ui/generation_handlers.py:571
 #, python-brace-format
 msgid "核心人物(可能未指定):{characters_involved}"
 msgstr ""
 
-#: ui/generation_handlers.py:224 ui/generation_handlers.py:571
+#: ui/generation_handlers.py:224 ui/generation_handlers.py:572
 #, python-brace-format
 msgid "核心人物:{characters_involved}"
 msgstr ""
 
 #: ui/generation_handlers.py:231 ui/generation_handlers.py:238
-#: ui/generation_handlers.py:578 ui/generation_handlers.py:585
+#: ui/generation_handlers.py:579 ui/generation_handlers.py:586
 #, python-brace-format
 msgid ""
 "核心人物：\n"
 "{role_content_str}"
 msgstr ""
 
-#: ui/generation_handlers.py:237 ui/generation_handlers.py:584
+#: ui/generation_handlers.py:237 ui/generation_handlers.py:585
 msgid "核心人物"
-msgstr ""
-
-#: ui/generation_handlers.py:247
-#, python-brace-format
-msgid "字数：{text_length}"
 msgstr ""
 
 #: ui/generation_handlers.py:263
@@ -1382,63 +1377,63 @@ msgstr ""
 msgid "请填写完整信息。"
 msgstr ""
 
-#: ui/generation_handlers.py:667
+#: ui/generation_handlers.py:669
 msgid "选择要导入的知识库文件"
 msgstr ""
 
-#: ui/generation_handlers.py:668
+#: ui/generation_handlers.py:670
 msgid "Text Files"
 msgstr ""
 
-#: ui/generation_handlers.py:668
+#: ui/generation_handlers.py:670
 msgid "All Files"
 msgstr ""
 
-#: ui/generation_handlers.py:694
+#: ui/generation_handlers.py:696
 msgid "无法以任何已知编码格式读取文件"
 msgstr ""
 
-#: ui/generation_handlers.py:713
+#: ui/generation_handlers.py:715
 msgid "✅ 知识库文件导入完成。"
 msgstr ""
 
-#: ui/generation_handlers.py:722
+#: ui/generation_handlers.py:724
 msgid "导入知识库时出错"
 msgstr ""
 
-#: ui/generation_handlers.py:739
+#: ui/generation_handlers.py:741
 msgid "确定要清空本地向量库吗？此操作不可恢复！"
 msgstr ""
 
-#: ui/generation_handlers.py:741
+#: ui/generation_handlers.py:743
 msgid "二次确认"
 msgstr ""
 
-#: ui/generation_handlers.py:741
+#: ui/generation_handlers.py:743
 msgid "你确定真的要删除所有向量数据吗？此操作不可恢复！"
 msgstr ""
 
-#: ui/generation_handlers.py:744
+#: ui/generation_handlers.py:746
 msgid "已清空向量库。"
 msgstr ""
 
-#: ui/generation_handlers.py:751
+#: ui/generation_handlers.py:753
 msgid "请先在主Tab中设置保存文件路径"
 msgstr ""
 
-#: ui/generation_handlers.py:756
+#: ui/generation_handlers.py:758
 msgid "剧情要点"
 msgstr ""
 
-#: ui/generation_handlers.py:756
+#: ui/generation_handlers.py:758
 msgid "当前还未生成任何剧情要点或冲突记录。"
 msgstr ""
 
-#: ui/generation_handlers.py:761
+#: ui/generation_handlers.py:763
 msgid "当前没有记录的剧情要点或冲突。"
 msgstr ""
 
-#: ui/generation_handlers.py:764
+#: ui/generation_handlers.py:766
 msgid "剧情要点/未解决冲突"
 msgstr ""
 
