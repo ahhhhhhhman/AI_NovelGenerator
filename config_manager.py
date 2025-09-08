@@ -5,7 +5,8 @@ import os
 import threading
 from llm_adapters import create_llm_adapter
 from embedding_adapters import create_embedding_adapter
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 
 def load_config(config_file: str) -> dict:
     """从指定的 config_file 加载配置，若不存在则返回空字典。"""

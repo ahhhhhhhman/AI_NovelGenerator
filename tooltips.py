@@ -1,6 +1,7 @@
 # tooltips.py
 # -*- coding: utf-8 -*-
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 tooltips = {
     "api_key": _("在这里填写你的API Key。如果使用OpenAI官方接口，请在 https://platform.openai.com/account/api-keys 获取。"),
     "base_url": _("模型的接口地址。若使用OpenAI官方：https://api.openai.com/v1。若使用Ollama本地部署，则类似 http://localhost:11434/v1。调用Gemini模型则无需填写。"),

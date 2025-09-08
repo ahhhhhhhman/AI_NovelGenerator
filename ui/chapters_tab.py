@@ -5,7 +5,8 @@ import customtkinter as ctk
 from tkinter import messagebox
 from ui.context_menu import TextWidgetContextMenu
 from utils import read_file, save_string_to_txt, clear_file_content
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def build_chapters_tab(self):
     self.chapters_view_tab = self.tabview.add(_("Chapters Manage"))
     self.chapters_view_tab.rowconfigure(0, weight=0)

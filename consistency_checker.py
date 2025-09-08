@@ -1,7 +1,8 @@
 # consistency_checker.py
 # -*- coding: utf-8 -*-
 from llm_adapters import create_llm_adapter
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 # ============== 增加对“剧情要点/未解决冲突”进行检查的可选引导 ==============
 CONSISTENCY_PROMPT = _("""\
 请检查下面的小说设定与最新章节是否存在明显冲突或不一致之处，如有请列出：

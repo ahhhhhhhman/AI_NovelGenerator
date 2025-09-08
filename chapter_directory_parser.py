@@ -1,7 +1,8 @@
 # chapter_blueprint_parser.py
 # -*- coding: utf-8 -*-
 import re
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def parse_chapter_blueprint(blueprint_text: str):
     """
     解析整份章节蓝图文本，返回一个列表，每个元素是一个 dict：

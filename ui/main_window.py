@@ -35,7 +35,8 @@ from ui.character_tab import build_character_tab, load_character_state, save_cha
 from ui.summary_tab import build_summary_tab, load_global_summary, save_global_summary
 from ui.chapters_tab import build_chapters_tab, refresh_chapters_list, on_chapter_selected, load_chapter_content, save_current_chapter, prev_chapter, next_chapter
 from ui.other_settings import build_other_settings_tab
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 
 class NovelGeneratorGUI:
     """

@@ -9,7 +9,8 @@ import os
 from xml.etree import ElementTree as ET
 import shutil
 import time
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def build_other_settings_tab(self):
     self.other_settings_tab = self.tabview.add(_("Other Settings"))
     self.other_settings_tab.rowconfigure(0, weight=1)

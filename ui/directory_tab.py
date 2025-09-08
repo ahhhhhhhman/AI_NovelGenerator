@@ -5,7 +5,8 @@ import customtkinter as ctk
 from tkinter import messagebox
 from utils import read_file, save_string_to_txt, clear_file_content
 from ui.context_menu import TextWidgetContextMenu
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def build_directory_tab(self):
     self.directory_tab = self.tabview.add(_("Chapter Blueprint"))
     self.directory_tab.rowconfigure(0, weight=0)
