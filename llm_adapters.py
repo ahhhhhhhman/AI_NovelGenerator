@@ -100,26 +100,35 @@ class GeminiAdapter(BaseLLMAdapter):
     """
     适配 Google Gemini (Google Generative AI) 接口
     """
+
+    # PenBo 修复新版本google-generativeai 不支持 Client 类问题；而是使用 GenerativeModel 类来访问API
     def __init__(self, api_key: str, base_url: str, model_name: str, max_tokens: int, temperature: float = 0.7, timeout: Optional[int] = 600):
         self.api_key = api_key
         self.model_name = model_name
         self.max_tokens = max_tokens
         self.temperature = temperature
-        # gemini超时时间是毫秒
-        self.timeout = timeout * 1000
+        self.timeout = timeout
 
-        self._client = genai.Client(api_key=self.api_key,http_options=types.HttpOptions(base_url=base_url,timeout=self.timeout))
+        # 配置API密钥
+        genai.configure(api_key=self.api_key)
+        
+        # 创建生成模型实例
+        self._model = genai.GenerativeModel(model_name=self.model_name)
 
     def invoke(self, prompt: str) -> str:
         try:
-            response = self._client.models.generate_content(
-                model = self.model_name,
-                contents = prompt,
-                config = types.GenerateContentConfig(
-                    max_output_tokens=self.max_tokens,
-                    temperature=self.temperature,
-                ),
+            # 设置生成配置
+            generation_config = genai.types.GenerationConfig(
+                max_output_tokens=self.max_tokens,
+                temperature=self.temperature,
             )
+            
+            # 生成内容
+            response = self._model.generate_content(
+                prompt,
+                generation_config=generation_config
+            )
+            
             if response and response.text:
                 return response.text
             else:

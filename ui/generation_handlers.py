@@ -445,37 +445,57 @@ def do_consistency_check(self):
             self.enable_button_safe(self.btn_check_consistency)
     threading.Thread(target=task, daemon=True).start()
 def generate_batch_ui(self):
+
+    # PenBo 优化界面，使用customtkinter进行批量生成章节界面
     def open_batch_dialog():
-        dialog = tk.Toplevel()
+        dialog = ctk.CTkToplevel()
+        dialog.title("批量生成章节")
+        
         chapter_file = os.path.join(self.filepath_var.get().strip(), "chapters")
         files = glob.glob(os.path.join(chapter_file, "chapter_*.txt"))
         if not files:
             num = 1
         else:
             num = max(int(os.path.basename(f).split('_')[1].split('.')[0]) for f in files) + 1
-        dialog.geometry("+500+400")
-        tk.Label(dialog, text=_("起始章节")).grid(row=0, column=0)
-        entry_start = tk.Entry(dialog)
-        entry_start.grid(row=0, column=1)
+            
+        dialog.geometry("400x200")
+        dialog.resizable(False, False)
+        
+        # 创建网格布局
+        dialog.grid_columnconfigure(0, weight=0)
+        dialog.grid_columnconfigure(1, weight=1)
+        dialog.grid_columnconfigure(2, weight=0)
+        dialog.grid_columnconfigure(3, weight=1)
+        
+        # 起始章节
+        ctk.CTkLabel(dialog, text="起始章节:").grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        entry_start = ctk.CTkEntry(dialog)
+        entry_start.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
         entry_start.insert(0, str(num))
-        tk.Label(dialog, text=_("结束章节")).grid(row=0, column=2)
-        entry_end = tk.Entry(dialog)
-        entry_end.grid(row=0, column=3)
-        tk.Label(dialog, text=_("期望字数")).grid(row=1, column=0)
-        entry_word = tk.Entry(dialog)
-        entry_word.grid(row=1, column=1)
+        
+        # 结束章节
+        ctk.CTkLabel(dialog, text="结束章节:").grid(row=0, column=2, padx=10, pady=10, sticky="w")
+        entry_end = ctk.CTkEntry(dialog)
+        entry_end.grid(row=0, column=3, padx=10, pady=10, sticky="ew")
+        
+        # 期望字数
+        ctk.CTkLabel(dialog, text="期望字数:").grid(row=1, column=0, padx=10, pady=10, sticky="w")
+        entry_word = ctk.CTkEntry(dialog)
+        entry_word.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
         entry_word.insert(0, self.word_number_var.get())
-        tk.Label(dialog, text=_("最低字数")).grid(row=1, column=2)
-        entry_min = tk.Entry(dialog)
-        entry_min.grid(row=1, column=3)
+        
+        # 最低字数
+        ctk.CTkLabel(dialog, text="最低字数:").grid(row=1, column=2, padx=10, pady=10, sticky="w")
+        entry_min = ctk.CTkEntry(dialog)
+        entry_min.grid(row=1, column=3, padx=10, pady=10, sticky="ew")
         entry_min.insert(0, self.word_number_var.get())
 
-        auto_enrich_bool = tk.BooleanVar()
-        auto_enrich_bool_ck = tk.Checkbutton(dialog, text=_("低于最低字数时自动扩写"), variable=auto_enrich_bool)
-        auto_enrich_bool_ck.grid(row=2, column=0)
+        # 自动扩写选项
+        auto_enrich_bool = ctk.BooleanVar()
+        auto_enrich_bool_ck = ctk.CTkCheckBox(dialog, text="低于最低字数时自动扩写", variable=auto_enrich_bool)
+        auto_enrich_bool_ck.grid(row=2, column=0, columnspan=2, padx=10, pady=10, sticky="w")
 
         result = {"start": None, "end": None, "word": None, "min": None, "auto_enrich": None, "close": False}
-
 
         def on_confirm():
             nonlocal result
@@ -497,7 +517,16 @@ def generate_batch_ui(self):
             nonlocal result
             result["close"] = True
             dialog.destroy()
-        tk.Button(dialog, text=_("确认"), command=on_confirm).grid(row=2, column=1)
+            
+        # 按钮框架
+        button_frame = ctk.CTkFrame(dialog)
+        button_frame.grid(row=3, column=0, columnspan=4, padx=10, pady=10, sticky="ew")
+        button_frame.grid_columnconfigure(0, weight=1)
+        button_frame.grid_columnconfigure(1, weight=1)
+        
+        ctk.CTkButton(button_frame, text="确认", command=on_confirm).grid(row=0, column=0, padx=10, pady=10, sticky="e")
+        ctk.CTkButton(button_frame, text="取消", command=on_cancel).grid(row=0, column=1, padx=10, pady=10, sticky="w")
+        
         dialog.protocol("WM_DELETE_WINDOW", on_cancel)
         dialog.transient(self.master)
         dialog.grab_set()

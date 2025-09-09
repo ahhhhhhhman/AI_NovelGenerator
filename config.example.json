@@ -58,5 +58,15 @@
         "architecture_llm": "Gemini 2.5 Pro",
         "final_chapter_llm": "GPT 5",
         "consistency_review_llm": "DeepSeek V3"
+    },
+    "proxy_setting": {
+        "proxy_url": "127.0.0.1",
+        "proxy_port": "",
+        "enabled": false
+    },
+    "webdav_config": {
+        "webdav_url": "",
+        "webdav_username": "",
+        "webdav_password": ""
     }
 }

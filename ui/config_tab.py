@@ -9,6 +9,8 @@ import customtkinter as ctk
 from config_manager import load_config, save_config
 from tooltips import tooltips
 
+import os
+
 
 def create_label_with_help(self, parent, label_text, tooltip_key, row, column,
                            font=None, sticky="e", padx=5, pady=5):
@@ -45,10 +47,16 @@ def build_config_tabview(self):
     self.embeddings_config_tab = self.config_tabview.add(_("Embedding settings"))
     self.config_choose = self.config_tabview.add(_("Config choose"))
 
+    # PenBo 增加代理功能支持
+    self.proxy_setting_tab = self.config_tabview.add("Proxy setting")
+
 
     build_ai_config_tab(self)
     build_embeddings_config_tab(self)
     build_config_choose_tab(self)
+
+    # PenBo 增加代理功能支持
+    build_proxy_setting_tab(self)
 
 def build_ai_config_tab(self):
     def refresh_config_dropdown():
@@ -607,11 +615,87 @@ def build_config_choose_tab(self):
 
 
 
+# PenBo 增加代理功能支持
+def build_proxy_setting_tab(self):
+    # 代理设置标签页布局
+    for i in range(5):
+        self.proxy_setting_tab.grid_rowconfigure(i, weight=0)
+    self.proxy_setting_tab.grid_columnconfigure(0, weight=0)
+    self.proxy_setting_tab.grid_columnconfigure(1, weight=1)
+
+    # 从配置文件加载代理设置
+    config_data = load_config(self.config_file)
+    proxy_setting = config_data.get("proxy_setting", {})
+    
+    # 代理启用开关
+    create_label_with_help(self, self.proxy_setting_tab, "启用代理:", "proxy_enabled", 0, 0)
+    self.proxy_enabled_var = ctk.BooleanVar(value=proxy_setting.get("enabled", False))
+    proxy_enabled_switch = ctk.CTkSwitch(
+        self.proxy_setting_tab,
+        text="",
+        variable=self.proxy_enabled_var,
+        onvalue=True,
+        offvalue=False,
+        font=("Microsoft YaHei", 12)
+    )
+    proxy_enabled_switch.grid(row=0, column=1, padx=5, pady=5, sticky="w")
+
+    # 地址输入框
+    create_label_with_help(self, self.proxy_setting_tab, "地址:", "proxy_address", 1, 0)
+    self.proxy_address_var = ctk.StringVar(value=proxy_setting.get("proxy_url", "127.0.0.1"))
+    proxy_address_entry = ctk.CTkEntry(
+        self.proxy_setting_tab,
+        textvariable=self.proxy_address_var,
+        font=("Microsoft YaHei", 12)
+    )
+    proxy_address_entry.grid(row=1, column=1, padx=5, pady=5, sticky="nsew")
+
+    # 端口输入框
+    create_label_with_help(self, self.proxy_setting_tab, "端口:", "proxy_port", 2, 0)
+    self.proxy_port_var = ctk.StringVar(value=proxy_setting.get("proxy_port", "10809"))
+    proxy_port_entry = ctk.CTkEntry(
+        self.proxy_setting_tab,
+        textvariable=self.proxy_port_var,
+        font=("Microsoft YaHei", 12)
+    )
+    proxy_port_entry.grid(row=2, column=1, padx=5, pady=5, sticky="nsew")
 
 
+    def open_proxy(address, port):
+        """启动代理"""
+        # 设置环境变量
+        os.environ['HTTP_PROXY'] = f"http://{address}:{port}"
+        os.environ['HTTPS_PROXY'] = f"http://{address}:{port}"
+
+    def save_proxy_setting():
+        config_data = load_config(self.config_file)
+        if "proxy_setting" not in config_data:
+            config_data["proxy_setting"] = {}
+            
+        config_data["proxy_setting"]["enabled"] = self.proxy_enabled_var.get()
+        config_data["proxy_setting"]["proxy_url"] = self.proxy_address_var.get()
+        config_data["proxy_setting"]["proxy_port"] = self.proxy_port_var.get()
+
+        save_config(config_data, self.config_file)
+        messagebox.showinfo("提示", "代理配置已保存。")
+
+        if self.proxy_enabled_var.get():
+            open_proxy(self.proxy_address_var.get(), self.proxy_port_var.get())
+        else:
+            os.environ.pop('HTTP_PROXY', None)
+            os.environ.pop('HTTPS_PROXY', None)
+
+    # 添加保存按钮
+    save_btn = ctk.CTkButton(
+        self.proxy_setting_tab,
+        text="保存代理设置",
+        command=save_proxy_setting,
+        font=("Microsoft YaHei", 12)
+    )
+    save_btn.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
 
-
+    
 
 def load_config_btn(self):
     cfg = load_config(self.config_file)

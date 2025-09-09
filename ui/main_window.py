@@ -88,6 +88,18 @@ class NovelGeneratorGUI:
                 "retrieval_k": 4
             }
 
+        # PenBo 增加代理功能支持
+        proxy_url = self.loaded_config["proxy_setting"]["proxy_url"]
+        proxy_port = self.loaded_config["proxy_setting"]["proxy_port"]
+        if self.loaded_config["proxy_setting"]["enabled"]:
+            os.environ['HTTP_PROXY'] = f"http://{proxy_url}:{proxy_port}"
+            os.environ['HTTPS_PROXY'] = f"http://{proxy_url}:{proxy_port}"
+        else:
+            os.environ.pop('HTTP_PROXY', None)  
+            os.environ.pop('HTTPS_PROXY', None)
+
+
+
         # -- LLM通用参数 --
         # self.llm_conf_name = next(iter(self.loaded_config["llm_configs"]))
         self.api_key_var = ctk.StringVar(value=llm_conf.get("api_key", ""))
