@@ -10,7 +10,8 @@ from customtkinter import CTkScrollableFrame, CTkTextbox, END
 from utils import read_file, save_string_to_txt  # 导入 utils 中的函数
 from novel_generator.common import invoke_with_cleaning  # 新增导入
 from prompt_definitions import Character_Import_Prompt
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 DEFAULT_FONT = ("Microsoft YaHei", 12)
 
 class RoleLibrary:

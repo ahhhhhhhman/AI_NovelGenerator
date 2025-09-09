@@ -5,7 +5,8 @@ import customtkinter as ctk
 from tkinter import messagebox
 from utils import read_file, save_string_to_txt, clear_file_content
 from ui.context_menu import TextWidgetContextMenu
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def build_character_tab(self):
     self.character_tab = self.tabview.add(_("Character State"))
     self.character_tab.rowconfigure(0, weight=0)

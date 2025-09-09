@@ -1,7 +1,5 @@
 # main.py
 # -*- coding: utf-8 -*-
-from i18n import setup_translations
-setup_translations("zh_CN")
 import customtkinter as ctk
 from ui import NovelGeneratorGUI
 def main():

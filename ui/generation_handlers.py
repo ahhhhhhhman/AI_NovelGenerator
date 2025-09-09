@@ -19,7 +19,8 @@ from novel_generator import (
     build_chapter_prompt
 )
 from consistency_checker import check_consistency
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def generate_novel_architecture_ui(self):
     filepath = self.filepath_var.get().strip()
     if not filepath:

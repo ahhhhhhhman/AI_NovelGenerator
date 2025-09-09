@@ -4,7 +4,8 @@ import customtkinter as ctk
 from tkinter import filedialog, messagebox
 from ui.context_menu import TextWidgetContextMenu
 from tooltips import tooltips
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def build_novel_params_area(self, start_row=1):
     self.params_frame = ctk.CTkScrollableFrame(self.right_frame, orientation="vertical")
     self.params_frame.grid(row=start_row, column=0, sticky="nsew", padx=5, pady=5)

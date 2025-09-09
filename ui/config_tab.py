@@ -10,7 +10,8 @@ from config_manager import load_config, save_config
 from tooltips import tooltips
 
 import os
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 
 def create_label_with_help(self, parent, label_text, tooltip_key, row, column,
                            font=None, sticky="e", padx=5, pady=5):

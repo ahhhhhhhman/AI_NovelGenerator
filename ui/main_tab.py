@@ -3,7 +3,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 from ui.context_menu import TextWidgetContextMenu
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 def build_main_tab(self):
     """
     主Tab包含左侧的"本章内容"编辑框和输出日志，以及右侧的主要操作和参数设置区

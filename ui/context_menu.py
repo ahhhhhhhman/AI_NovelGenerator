@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 import tkinter as tk
 import customtkinter as ctk
-
+from i18n import get_translator
+_ = get_translator()  # 获取翻译函数
 class TextWidgetContextMenu:
     """
     为 customtkinter.TextBox 或 tkinter.Text 提供右键复制/剪切/粘贴/全选的功能。
